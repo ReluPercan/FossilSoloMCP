@@ -1,0 +1,40 @@
+# ==========================================
+# FossilSoloMCP - Exclusion rules for Git
+# ==========================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# Fossil SCM local metadata and repositories
+_FOSSIL_
+*.fossil
+*.fossil-journal
+.fslckout
+
+# RAM Disk archives and temporary development sessions
+arh_r/
+
+# IDE and AI assistant local configurations
+.agents/
+.gemini/
+.idea/
+.vscode/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+$RECYCLE.BIN/
+System Volume Information/

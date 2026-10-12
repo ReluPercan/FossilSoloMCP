@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ro" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FossilSoloMCP - Prezentare Rapidă (Română)</title>
+  <meta name="description" content="Ghid rapid de prezentare și configurare pentru serverul MCP Fossil SCM.">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('fossilsolo_theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+
+  :root, [data-theme="dark"] {
+    --bg-page: #0f141c;
+    --bg-surface: #161d28;
+    --bg-card: #1c2534;
+    --bg-subtle: #242f42;
+    --bg-hover: #2d3a52;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --border-light: #283548;
+    --border-strong: #3b4d68;
+    --primary: #38bdf8;
+    --primary-hover: #7dd3fc;
+    --primary-dim: rgba(56, 189, 248, 0.12);
+    --code-bg: #121822;
+    --code-border: #222d3e;
+    --table-stripe: #141b25;
+    --table-header: #1a2332;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.55);
+
+    --alert-note-border: #3b82f6;
+    --alert-note-bg: rgba(59, 130, 246, 0.1);
+    --alert-note-title: #60a5fa;
+
+    --alert-tip-border: #10b981;
+    --alert-tip-bg: rgba(16, 185, 129, 0.1);
+    --alert-tip-title: #34d399;
+
+    --alert-important-border: #a855f7;
+    --alert-important-bg: rgba(168, 85, 247, 0.1);
+    --alert-important-title: #c084fc;
+
+    --alert-warning-border: #f59e0b;
+    --alert-warning-bg: rgba(245, 158, 11, 0.1);
+    --alert-warning-title: #fbbf24;
+
+    --alert-caution-border: #ef4444;
+    --alert-caution-bg: rgba(239, 68, 68, 0.1);
+    --alert-caution-title: #f87171;
+  }
+
+  [data-theme="light"] {
+    --bg-page: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-card: #f1f5f9;
+    --bg-subtle: #e2e8f0;
+    --bg-hover: #cbd5e1;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+    --border-light: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --primary: #0284c7;
+    --primary-hover: #0369a1;
+    --primary-dim: rgba(2, 132, 199, 0.08);
+    --code-bg: #f8fafc;
+    --code-border: #e2e8f0;
+    --table-stripe: #f8fafc;
+    --table-header: #edf2f7;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    --alert-note-border: #2563eb;
+    --alert-note-bg: #eff6ff;
+    --alert-note-title: #1d4ed8;
+
+    --alert-tip-border: #059669;
+    --alert-tip-bg: #ecfdf5;
+    --alert-tip-title: #047857;
+
+    --alert-important-border: #9333ea;
+    --alert-important-bg: #faf5ff;
+    --alert-important-title: #7e22ce;
+
+    --alert-warning-border: #d97706;
+    --alert-warning-bg: #fffbeb;
+    --alert-warning-title: #b45309;
+
+    --alert-caution-border: #dc2626;
+    --alert-caution-bg: #fef2f2;
+    --alert-caution-title: #b91c1c;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.68;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .top-control-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    background: rgba(15, 20, 28, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 10000;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  [data-theme="light"] .top-control-bar {
+    background: rgba(248, 250, 252, 0.9);
+  }
+
+  .bar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.05em;
+    color: var(--text-main);
+    text-decoration: none;
+    user-select: none;
+  }
+  .bar-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #0284c7, #0ea5e9);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 13px;
+    border-radius: 5px;
+    font-family: Consolas, monospace;
+    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+  }
+
+  .bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 2px;
+    box-shadow: var(--shadow-sm);
+  }
+  .lang-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.84em;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .lang-btn:hover { color: var(--text-main); }
+  .lang-btn.active {
+    background-color: var(--primary);
+    color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .theme-btn {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-strong);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15em;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  .theme-btn:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  .page-container {
+    max-width: 960px;
+    margin: 54px auto 0 auto;
+    padding: 40px 32px 80px 32px;
+    background-color: var(--bg-surface);
+    border-left: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    min-height: calc(100vh - 54px);
+    box-shadow: var(--shadow-md);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-main);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+  }
+  h1 { font-size: 2.2em; border-bottom: 2px solid var(--border-light); padding-bottom: 0.4em; }
+  h2 { font-size: 1.6em; border-bottom: 1px solid var(--border-light); padding-bottom: 0.3em; margin-top: 2em; }
+  h3 { font-size: 1.25em; }
+  h4 { font-size: 1.08em; }
+
+  a { color: var(--primary); text-decoration: none; transition: color 0.15s ease; }
+  a:hover { color: var(--primary-hover); text-decoration: underline; }
+
+  p, ul, ol { margin-top: 0.8em; margin-bottom: 0.8em; }
+  li { margin-top: 0.3em; margin-bottom: 0.3em; }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border-light);
+    margin: 2.5em 0;
+  }
+
+  code {
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    color: var(--primary);
+  }
+
+  pre, div.sourceCode {
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: 1.4em 0;
+    box-shadow: var(--shadow-sm);
+  }
+  pre code, div.sourceCode code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font-size: 1em;
+  }
+
+  .kw, .cf { color: #f472b6; font-weight: 600; }
+  .dt { color: #38bdf8; }
+  .st { color: #a3e635; }
+  .co { color: #94a3b8; font-style: italic; }
+  .fu { color: #60a5fa; }
+  .op { color: #f43f5e; }
+  .va { color: #e2e8f0; }
+  .cn { color: #fbbf24; }
+  .sc { color: #38bdf8; }
+  .bn { color: #c084fc; }
+
+  [data-theme="light"] .kw, [data-theme="light"] .cf { color: #be185d; }
+  [data-theme="light"] .dt { color: #0369a1; }
+  [data-theme="light"] .st { color: #15803d; }
+  [data-theme="light"] .co { color: #64748b; font-style: italic; }
+  [data-theme="light"] .fu { color: #1d4ed8; }
+  [data-theme="light"] .op { color: #b91c1c; }
+  [data-theme="light"] .va { color: #1e293b; }
+  [data-theme="light"] .cn { color: #b45309; }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94em;
+    text-align: left;
+  }
+  th, td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+  }
+  th:last-child, td:last-child { border-right: none; }
+  th {
+    background-color: var(--table-header);
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  tr:nth-child(even) td { background-color: var(--table-stripe); }
+  tr:hover td { background-color: var(--bg-hover); }
+
+  .note, .tip, .important, .warning, .caution, .markdown-alert {
+    padding: 14px 18px;
+    margin: 1.6em 0;
+    border-left: 4px solid var(--border-strong);
+    border-radius: 0 8px 8px 0;
+    background-color: var(--bg-card);
+  }
+  .note .title, .tip .title, .important .title, .warning .title, .caution .title, .markdown-alert-title {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 1.02em;
+  }
+  .note .title p, .tip .title p, .important .title p, .warning .title p, .caution .title p {
+    margin: 0;
+  }
+
+  .note { border-left-color: var(--alert-note-border); background-color: var(--alert-note-bg); }
+  .note .title { color: var(--alert-note-title); }
+  .note .title::before { content: "ℹ️"; margin-right: 4px; }
+
+  .tip { border-left-color: var(--alert-tip-border); background-color: var(--alert-tip-bg); }
+  .tip .title { color: var(--alert-tip-title); }
+  .tip .title::before { content: "💡"; margin-right: 4px; }
+
+  .important { border-left-color: var(--alert-important-border); background-color: var(--alert-important-bg); }
+  .important .title { color: var(--alert-important-title); }
+  .important .title::before { content: "📌"; margin-right: 4px; }
+
+  .warning { border-left-color: var(--alert-warning-border); background-color: var(--alert-warning-bg); }
+  .warning .title { color: var(--alert-warning-title); }
+  .warning .title::before { content: "⚠️"; margin-right: 4px; }
+
+  .caution { border-left-color: var(--alert-caution-border); background-color: var(--alert-caution-bg); }
+  .caution .title { color: var(--alert-caution-title); }
+  .caution .title::before { content: "🛑"; margin-right: 4px; }
+
+  .back-to-top-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background-color: var(--primary);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.9em;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.92;
+    transition: opacity 0.2s, transform 0.2s, background-color 0.2s;
+    z-index: 9999;
+    text-decoration: none !important;
+  }
+  .back-to-top-btn:hover {
+    opacity: 1;
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 650px) {
+    .top-control-bar { padding: 0 12px; }
+    .bar-brand span:not(.bar-brand-badge) { display: none; }
+    .page-container { padding-left: 14px; padding-right: 14px; }
+    .back-to-top-btn { bottom: 18px; right: 18px; padding: 8px 14px; font-size: 0.82em; }
+  }
+
+  @media print {
+    body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+    .top-control-bar, .back-to-top-btn { display: none !important; }
+    .page-container { max-width: 100%; padding-left: 0; padding-right: 0; margin-top: 0; }
+    pre, table { page-break-inside: avoid; box-shadow: none; }
+  }
+
+  </style>
+</head>
+<body>
+
+<header class="top-control-bar">
+  <a href="#" class="bar-brand">
+    <span class="bar-brand-badge">F</span>
+    <span>FossilSoloMCP</span>
+  </a>
+  <div class="bar-actions">
+    <button id="theme-toggle-btn" class="theme-btn" aria-label="Comută tema" title="Comută tema (Dark / Light)">
+      <span id="theme-icon">☀️</span>
+    </button>
+  </div>
+</header>
+
+<main class="page-container">
+  <article lang="ro">
+<p><a href="citeste-ma.html">🇷🇴 Versiunea în limba română</a> | <a
+href="../README.html">🇬🇧 English Version</a></p>
+<hr />
+<p>⚠️ <strong>Notă:</strong><br />
+✨ Proiect <strong>100% AI‑powered 🪄</strong> — concept, analiză, cod,
+testare, documentație — cu <strong>omul</strong> 👨‍💻 în buclă ca
+<strong>big boss</strong> 👨‍💼 pentru <strong>control</strong>,
+<strong>fine‑tuning</strong> și <strong>decizii</strong> 🤔😉🤫.</p>
+<hr />
+<h1 id="fossil-scm---server-mcp">Fossil SCM - Server MCP</h1>
+<p>Un server robust bazat pe protocolul Model Context Protocol (MCP) ce
+oferă acces programatic complet și non-interactiv (headless) la
+depozitele <strong>Fossil SCM</strong>. Acesta expune <strong>29 de
+unelte dedicate</strong> care acoperă Controlul Versiunilor,
+Administrarea &amp; Setările Depozitului, Sistemul de Tichete (Bug
+Tracking) și Documentația Wiki, concepute special pentru agenți AI
+(Google Antigravity, Claude Desktop, Cursor etc.).</p>
+<h2 id="cerințe-preliminare">Cerințe preliminare</h2>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>AVERTISMENT CRITIC:</strong> Acest pachet NU instalează
+executabilul Fossil propriu-zis.<br />
+Pentru ca acest server MCP să funcționeze, TREBUIE să aveți utilitarul
+în linie de comandă <code>fossil</code> instalat și adăugat în variabila
+de mediu <code>PATH</code> a sistemului dumneavoastră.</p>
+</div>
+<ol type="1">
+<li>Descărcați Fossil de pe site-ul oficial: <a
+href="https://fossil-scm.org/"><span>https://fossil-scm.org/</span></a></li>
+<li>Dezarhivați și plasați executabilul (<code>fossil.exe</code> pe
+Windows, <code>fossil</code> pe Linux/macOS) într-un director la
+alegere.</li>
+<li>Adăugați directorul respectiv în <code>PATH</code>-ul
+sistemului.</li>
+</ol>
+<h2 id="instalare--configurare">Instalare &amp; Configurare</h2>
+<p>Pentru a integra acest server MCP cu Claude Desktop, Google
+Antigravity sau alți clienți compatibili MCP, adăugați următoarea
+configurație în fișierul de setări MCP (de exemplu
+<code>claude_desktop_config.json</code> sau
+<code>mcp_config.json</code>):</p>
+<h3 id="utilizând-uv-recomandat">Utilizând <code>uv</code>
+(Recomandat)</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fossil-scm&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uv&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;run&quot;</span><span class="ot">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;--directory&quot;</span><span class="ot">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;/cale/catre/fossil-scm-mcp&quot;</span><span class="ot">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;fossil-scm-mcp&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><em>Înlocuiți <code>/cale/catre/fossil-scm-mcp</code> cu calea reală
+către directorul repozitoriului de pe sistemul dumneavoastră (de exemplu
+<code>C:/Tools/FossilSCM</code> sau
+<code>/home/utilizator/FossilSCM</code>).</em></p>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>Regula de Aur pentru Agenți AI (<code>cwd</code>
+dinamic):</strong><br />
+Serverul rulează complet decuplat și dinamic. Pentru a gestiona corect
+depozite multiple fără conflicte, <strong>instruiți întotdeauna
+asistentul AI să furnizeze parametrul <code>cwd</code></strong> (calea
+absolută a proiectului curent) la fiecare apel de unealtă.</p>
+<p><em>Regulă recomandată pentru Agentul AI (System Prompt /
+Instrucțiuni personalizate):</em></p>
+<pre class="text"><code>La apelarea oricărui tool din serverul MCP fossil-scm, furnizează întotdeauna parametrul &#39;cwd&#39; setat explicit la calea directorului de lucru curent.</code></pre>
+</div>
+<div class="tip">
+<div class="title">
+<p>Tip</p>
+</div>
+<p>Parametrul CLI <code>--repository</code> poate fi utilizat opțional
+pentru a specifica un director de lucru prestabilit de rezervă în cazul
+apelurilor fără <code>cwd</code>. Totuși, transmiterea dinamică a
+parametrului <code>cwd</code> la fiecare apel reprezintă practica
+recomandată.</p>
+</div>
+<h2 id="caracteristici-și-funcționalități-cheie">Caracteristici și
+Funcționalități Cheie</h2>
+<ul>
+<li><strong>29 de Unelte Specializate:</strong>
+<ul>
+<li><strong>Controlul Versiunilor (20 de unelte):</strong> Starea
+spațiului de lucru (<code>fossil_status</code>), diferențe cu suport
+pentru revizii și ramuri (<code>fossil_diff</code>), vizualizare
+istorică a fișierelor fără checkout (<code>fossil_cat</code>), istoric
+per fișier (<code>fossil_finfo</code>), restaurare granulară a
+fișierelor (<code>fossil_revert</code>), redenumire fișiere cu
+conservarea istoricului în graful DAG (<code>fossil_mv</code>),
+igienizarea spațiului de lucru (<code>fossil_clean</code>), fuzionarea
+ramurilor cu închidere automată (<code>fossil_merge</code>), depozitare
+temporară/stash (<code>fossil_stash</code>), etichete simbolice/taguri
+(<code>fossil_tag</code>), adăugare/eliminare granulară
+(<code>fossil_add</code>, <code>fossil_rm</code>,
+<code>fossil_addremove</code>, <code>fossil_extras</code>), gestionarea
+ramurilor (<code>fossil_branch</code>), comitere cu creare directă de
+ramură (<code>fossil_commit</code>), cronologie/timeline cu filtre pe
+cale și tip (<code>fossil_timeline</code>), precum și operațiuni sigure
+de anulare și actualizare (<code>fossil_undo</code>,
+<code>fossil_update</code>).</li>
+<li><strong>Tichete &amp; Urmărire Erori (3 unelte):</strong> Listare
+(<code>fossil_ticket_list</code>), creare
+(<code>fossil_ticket_create</code>) și actualizare tichete
+(<code>fossil_ticket_update</code>), stocate direct în baza de date a
+depozitului.</li>
+<li><strong>Documentație Wiki (3 unelte):</strong> Listare
+(<code>fossil_wiki_ls</code>), export/citire
+(<code>fossil_wiki_read</code>) și comitere/scriere
+(<code>fossil_wiki_write</code>) pagini wiki în format Markdown.</li>
+<li><strong>Administrare &amp; Configurare Depozit (3 unelte):</strong>
+Inițializare depozite noi (<code>fossil_init</code>), deschidere
+depozite (<code>fossil_open</code>) și inspectare/modificare setări
+(<code>fossil_settings</code>).</li>
+</ul></li>
+<li><strong>Reziliență Non-Interactivă &amp; Anti-Hang:</strong>
+<ul>
+<li>Redirecționează automat <code>stdin</code> către
+<code>DEVNULL</code> pentru a eșua imediat prompturile interactive CLI
+(<code>y/N</code>) în loc să blocheze execuția.</li>
+<li>Mecanism integrat de timeout la 30 de secunde cu raportare clară a
+erorilor.</li>
+<li>Flag <code>--no-warnings</code> implicit și tratare automată la
+comitere pentru fișiere binare și terminații de rând CRLF/LF.</li>
+<li><code>fossil_add</code> folosește <code>force=True</code> în mod
+implicit, ocolind curat prompturile de confirmare pentru tiparele
+<code>ignore-glob</code> atunci când fișierele sunt specificate
+nominal.</li>
+</ul></li>
+<li><strong>Depozite Centralizate:</strong> Organizează automat
+depozitele într-un director <code>.fossil_repositories/</code> situat în
+afara spațiului de lucru activ.</li>
+<li><strong>Siguranță Înainte de Toate:</strong> Operațiunile
+destructive (<code>undo</code>, <code>update</code>) sunt marcate
+explicit cu avertismente, determinând agenții AI să ceară confirmarea
+utilizatorului înainte de execuție.</li>
+</ul>
+<hr />
+<h2 id="books-documentație-completă">📚 Documentație Completă</h2>
+<p>Pentru detalii arhitecturale avansate, ghiduri de fluxuri AI și
+referința completă a tuturor celor 29 de instrumente, consultați <a
+href="../MANUAL.html">Manualul de Utilizare și Referință
+Tehnică</a>.</p>
+<hr />
+<h2 id="page_facing_up-licență">📄 Licență</h2>
+<p>Acest proiect este licențiat sub termenii licenței
+<strong>MIT</strong>. Consultă fișierul <a href="../LICENSE">LICENSE</a>
+pentru detalii complete.</p>
+<hr />
+<h2 id="memo-garanție">📝 Garanție</h2>
+<p>Nu se oferă absolut niciun fel de garanție!</p>
+
+  </article>
+</main>
+
+<a href="#" class="back-to-top-btn" id="back-to-top">↑ Sus</a>
+
+<script>
+(function() {
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  const themeIcon = document.getElementById('theme-icon');
+
+  function updateThemeIcon(theme) {
+    if (themeIcon) {
+      themeIcon.textContent = (theme === 'light') ? '🌙' : '☀️';
+    }
+  }
+
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeIcon(currentTheme);
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = (current === 'dark') ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('fossilsolo_theme', next);
+      updateThemeIcon(next);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

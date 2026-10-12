@@ -1,0 +1,9 @@
+# Ensure consistent line endings across platforms
+* text=auto eol=lf
+
+# GitHub Linguist attributes
+# Treat schema JSON files, markdown docs, and HTML manuals as documentation
+# to ensure Python represents 100% of codebase statistics
+doc/schemas/*.json linguist-documentation
+*.md linguist-documentation
+*.html linguist-documentation

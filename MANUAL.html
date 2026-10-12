@@ -1,0 +1,2723 @@
+﻿<!DOCTYPE html>
+<html lang="ro" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="doc-title">FossilSoloMCP - Manual de Utilizare și Referință Tehnică</title>
+  <meta name="description" id="doc-desc" content="Manual complet de utilizare și referință tehnică pentru serverul MCP FossilSoloMCP (Fossil SCM).">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('fossilsolo_theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+
+  :root, [data-theme="dark"] {
+    --bg-page: #0f141c;
+    --bg-surface: #161d28;
+    --bg-card: #1c2534;
+    --bg-subtle: #242f42;
+    --bg-hover: #2d3a52;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --border-light: #283548;
+    --border-strong: #3b4d68;
+    --primary: #38bdf8;
+    --primary-hover: #7dd3fc;
+    --primary-dim: rgba(56, 189, 248, 0.12);
+    --code-bg: #121822;
+    --code-border: #222d3e;
+    --table-stripe: #141b25;
+    --table-header: #1a2332;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.55);
+
+    --alert-note-border: #3b82f6;
+    --alert-note-bg: rgba(59, 130, 246, 0.1);
+    --alert-note-title: #60a5fa;
+
+    --alert-tip-border: #10b981;
+    --alert-tip-bg: rgba(16, 185, 129, 0.1);
+    --alert-tip-title: #34d399;
+
+    --alert-important-border: #a855f7;
+    --alert-important-bg: rgba(168, 85, 247, 0.1);
+    --alert-important-title: #c084fc;
+
+    --alert-warning-border: #f59e0b;
+    --alert-warning-bg: rgba(245, 158, 11, 0.1);
+    --alert-warning-title: #fbbf24;
+
+    --alert-caution-border: #ef4444;
+    --alert-caution-bg: rgba(239, 68, 68, 0.1);
+    --alert-caution-title: #f87171;
+  }
+
+  [data-theme="light"] {
+    --bg-page: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-card: #f1f5f9;
+    --bg-subtle: #e2e8f0;
+    --bg-hover: #cbd5e1;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+    --border-light: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --primary: #0284c7;
+    --primary-hover: #0369a1;
+    --primary-dim: rgba(2, 132, 199, 0.08);
+    --code-bg: #f8fafc;
+    --code-border: #e2e8f0;
+    --table-stripe: #f8fafc;
+    --table-header: #edf2f7;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    --alert-note-border: #2563eb;
+    --alert-note-bg: #eff6ff;
+    --alert-note-title: #1d4ed8;
+
+    --alert-tip-border: #059669;
+    --alert-tip-bg: #ecfdf5;
+    --alert-tip-title: #047857;
+
+    --alert-important-border: #9333ea;
+    --alert-important-bg: #faf5ff;
+    --alert-important-title: #7e22ce;
+
+    --alert-warning-border: #d97706;
+    --alert-warning-bg: #fffbeb;
+    --alert-warning-title: #b45309;
+
+    --alert-caution-border: #dc2626;
+    --alert-caution-bg: #fef2f2;
+    --alert-caution-title: #b91c1c;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.68;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .top-control-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    background: rgba(15, 20, 28, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 10000;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  [data-theme="light"] .top-control-bar {
+    background: rgba(248, 250, 252, 0.9);
+  }
+
+  .bar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.05em;
+    color: var(--text-main);
+    text-decoration: none;
+    user-select: none;
+  }
+  .bar-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #0284c7, #0ea5e9);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 13px;
+    border-radius: 5px;
+    font-family: Consolas, monospace;
+    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+  }
+
+  .bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 2px;
+    box-shadow: var(--shadow-sm);
+  }
+  .lang-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.84em;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .lang-btn:hover { color: var(--text-main); }
+  .lang-btn.active {
+    background-color: var(--primary);
+    color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .theme-btn {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-strong);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15em;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  .theme-btn:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  .page-container {
+    max-width: 960px;
+    margin: 54px auto 0 auto;
+    padding: 40px 32px 80px 32px;
+    background-color: var(--bg-surface);
+    border-left: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    min-height: calc(100vh - 54px);
+    box-shadow: var(--shadow-md);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-main);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+  }
+  h1 { font-size: 2.2em; border-bottom: 2px solid var(--border-light); padding-bottom: 0.4em; }
+  h2 { font-size: 1.6em; border-bottom: 1px solid var(--border-light); padding-bottom: 0.3em; margin-top: 2em; }
+  h3 { font-size: 1.25em; }
+  h4 { font-size: 1.08em; }
+
+  a { color: var(--primary); text-decoration: none; transition: color 0.15s ease; }
+  a:hover { color: var(--primary-hover); text-decoration: underline; }
+
+  p, ul, ol { margin-top: 0.8em; margin-bottom: 0.8em; }
+  li { margin-top: 0.3em; margin-bottom: 0.3em; }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border-light);
+    margin: 2.5em 0;
+  }
+
+  code {
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    color: var(--primary);
+  }
+
+  pre, div.sourceCode {
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: 1.4em 0;
+    box-shadow: var(--shadow-sm);
+  }
+  pre code, div.sourceCode code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font-size: 1em;
+  }
+
+  .kw, .cf { color: #f472b6; font-weight: 600; }
+  .dt { color: #38bdf8; }
+  .st { color: #a3e635; }
+  .co { color: #94a3b8; font-style: italic; }
+  .fu { color: #60a5fa; }
+  .op { color: #f43f5e; }
+  .va { color: #e2e8f0; }
+  .cn { color: #fbbf24; }
+  .sc { color: #38bdf8; }
+  .bn { color: #c084fc; }
+
+  [data-theme="light"] .kw, [data-theme="light"] .cf { color: #be185d; }
+  [data-theme="light"] .dt { color: #0369a1; }
+  [data-theme="light"] .st { color: #15803d; }
+  [data-theme="light"] .co { color: #64748b; font-style: italic; }
+  [data-theme="light"] .fu { color: #1d4ed8; }
+  [data-theme="light"] .op { color: #b91c1c; }
+  [data-theme="light"] .va { color: #1e293b; }
+  [data-theme="light"] .cn { color: #b45309; }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94em;
+    text-align: left;
+  }
+  th, td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+  }
+  th:last-child, td:last-child { border-right: none; }
+  th {
+    background-color: var(--table-header);
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  tr:nth-child(even) td { background-color: var(--table-stripe); }
+  tr:hover td { background-color: var(--bg-hover); }
+
+  .note, .tip, .important, .warning, .caution, .markdown-alert {
+    padding: 14px 18px;
+    margin: 1.6em 0;
+    border-left: 4px solid var(--border-strong);
+    border-radius: 0 8px 8px 0;
+    background-color: var(--bg-card);
+  }
+  .note .title, .tip .title, .important .title, .warning .title, .caution .title, .markdown-alert-title {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 1.02em;
+  }
+  .note .title p, .tip .title p, .important .title p, .warning .title p, .caution .title p {
+    margin: 0;
+  }
+
+  .note { border-left-color: var(--alert-note-border); background-color: var(--alert-note-bg); }
+  .note .title { color: var(--alert-note-title); }
+  .note .title::before { content: "ℹ️"; margin-right: 4px; }
+
+  .tip { border-left-color: var(--alert-tip-border); background-color: var(--alert-tip-bg); }
+  .tip .title { color: var(--alert-tip-title); }
+  .tip .title::before { content: "💡"; margin-right: 4px; }
+
+  .important { border-left-color: var(--alert-important-border); background-color: var(--alert-important-bg); }
+  .important .title { color: var(--alert-important-title); }
+  .important .title::before { content: "📌"; margin-right: 4px; }
+
+  .warning { border-left-color: var(--alert-warning-border); background-color: var(--alert-warning-bg); }
+  .warning .title { color: var(--alert-warning-title); }
+  .warning .title::before { content: "⚠️"; margin-right: 4px; }
+
+  .caution { border-left-color: var(--alert-caution-border); background-color: var(--alert-caution-bg); }
+  .caution .title { color: var(--alert-caution-title); }
+  .caution .title::before { content: "🛑"; margin-right: 4px; }
+
+  .back-to-top-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background-color: var(--primary);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.9em;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.92;
+    transition: opacity 0.2s, transform 0.2s, background-color 0.2s;
+    z-index: 9999;
+    text-decoration: none !important;
+  }
+  .back-to-top-btn:hover {
+    opacity: 1;
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 650px) {
+    .top-control-bar { padding: 0 12px; }
+    .bar-brand span:not(.bar-brand-badge) { display: none; }
+    .page-container { padding-left: 14px; padding-right: 14px; }
+    .back-to-top-btn { bottom: 18px; right: 18px; padding: 8px 14px; font-size: 0.82em; }
+  }
+
+  @media print {
+    body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+    .top-control-bar, .back-to-top-btn { display: none !important; }
+    .page-container { max-width: 100%; padding-left: 0; padding-right: 0; margin-top: 0; }
+    pre, table { page-break-inside: avoid; box-shadow: none; }
+  }
+
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+<header class="top-control-bar">
+  <a href="#" class="bar-brand">
+    <span class="bar-brand-badge">F</span>
+    <span>FossilSoloMCP</span>
+  </a>
+  <div class="bar-actions">
+    <div class="lang-switcher" id="lang-switcher">
+      <button type="button" class="lang-btn active" id="btn-lang-ro" data-lang="ro" title="Limba Română">🇷🇴 RO</button>
+      <button type="button" class="lang-btn" id="btn-lang-en" data-lang="en" title="English Language">🇬🇧 EN</button>
+    </div>
+    <button id="theme-toggle-btn" class="theme-btn" aria-label="Comută tema" title="Comută tema (Dark / Light)">
+      <span id="theme-icon">☀️</span>
+    </button>
+  </div>
+</header>
+
+<main class="page-container">
+  <article id="lang-section-ro" class="lang-content active" lang="ro">
+<p>⚠️ <strong>Notă:</strong><br />
+✨ Proiect <strong>100% AI‑powered 🪄</strong> — concept, analiză, cod,
+testare, documentație — cu <strong>omul</strong> 👨‍💻 în buclă ca
+<strong>big boss</strong> 👨‍💼 pentru <strong>control</strong>,
+<strong>fine‑tuning</strong> și <strong>decizii</strong> 🤔😉🤫.</p>
+<hr />
+<h1
+id="manual-de-utilizare-și-referință-tehnică-fossil-scm-mcp-fossilsolomcp">Manual
+de Utilizare și Referință Tehnică: Fossil SCM MCP (FossilSoloMCP)</h1>
+<p>Server Model Context Protocol (MCP) de nivel profesional pentru
+integrarea completă a sistemului de control al versiunilor
+<strong>Fossil SCM</strong> cu asistenți AI și medii moderne de
+dezvoltare.</p>
+<hr />
+<h2 id="1-introducere--filosofia-proiectului">1. Introducere &amp;
+Filosofia Proiectului</h2>
+<h3 id="ce-este-fossil-scm">Ce este Fossil SCM?</h3>
+<p><a href="https://fossil-scm.org/">Fossil</a> este un sistem
+distribuit de control al versiunilor creat de D. Richard Hipp (autorul
+bazei de date SQLite). Spre deosebire de alte sisteme (precum Git),
+Fossil include nativ într-un singur executabil compact și autonom:</p>
+<ul>
+<li><strong>Controlul versiunilor arborelui de fișiere</strong> (Version
+Control).</li>
+<li><strong>Sistem integrat de urmărire a sarcinilor și
+erorilor</strong> (Bug &amp; Task Ticketing).</li>
+<li><strong>Enciclopedie de proiect distribuită</strong> (Sistem Wiki
+încorporat).</li>
+<li><strong>Interfață web grafică completă</strong>
+(<code>fossil ui</code> / <code>fossil server</code>), accesibilă
+instantaneu din browser.</li>
+<li><strong>Format unic de stocare:</strong> Întregul depozit, istoricul
+complet, tichetele și paginile wiki sunt stocate fizic într-un singur
+fișier bază de date SQLite (<code>.fossil</code>).</li>
+</ul>
+<h3 id="de-ce-fossil-pentru-dezvoltarea-solo-om--ai">De ce Fossil pentru
+dezvoltarea solo Om + AI?</h3>
+<p>În mediile de lucru moderne în care un dezvoltator colaborează strâns
+cu asistenți AI (cum ar fi agenții din Google Antigravity, Claude
+Desktop, Cursor, Continue etc.), Fossil oferă avantaje decisive:</p>
+<ol type="1">
+<li><strong>Zero dependențe de infrastructură externă:</strong> Nu este
+nevoie de conturi cloud, chei API pentru servicii terțe, token-uri
+externe sau servere de baze de date. Totul este 100% local, privat și
+autonom pe calculatorul tău.</li>
+<li><strong>Memorie persistentă nativă pentru AI:</strong> Sistemul Wiki
+și Ticketing-ul integrate direct în depozit permit agentului AI să
+citească și să consemneze starea proiectului, deciziile arhitecturale și
+istoricul problemelor fără a polua directorul de cod sursă.</li>
+<li><strong>Integritate tranzacțională atomică:</strong> Datorită
+motorului SQLite intern, tranzacțiile sunt atomice, consistente și
+sigure împotriva întreruperilor accidentale de alimentare sau
+crash-urilor de proces.</li>
+</ol>
+<h3 id="ideal-și-pentru-echipe-mici-fără-complexitatea-git-ului">Ideal
+și pentru Echipe Mici (Fără Complexitatea Git-ului)</h3>
+<p>Deși este optimizat pentru lucrul solo asistat de AI, Fossil este o
+alegere excepțională și pentru <strong>echipe mici (2–10
+colaboratori)</strong> care își doresc simplitate, claritate și vor să
+evite birocrația și complexitatea adesea copleșitoare a Git-ului:</p>
+<ol type="1">
+<li><strong>Soluție completă „All-in-One”:</strong> Într-o echipă mică,
+configurarea și întreținerea separată a unor servicii precum
+GitHub/GitLab, Jira/Trello (task tracking), Confluence/Notion
+(documentație wiki) sau servere de forum consumă timp și resurse
+nejustificate. Fossil include toate aceste unelte nativ, legate organic
+de fiecare commit și stocate în același depozit SQLite.</li>
+<li><strong>Eliminarea „ceremoniilor” complexe din Git:</strong>
+Concepte precum <em>detached HEAD</em>, zona de staging (index)
+separată, rezolvări confuze de <em>rebase</em> interactiv, comenzi
+periculoase de <em>force push</em> sau pierderea commit-urilor orfane
+sunt absente sau simplificate radical în Fossil. Istoricul în Fossil
+este conceput pentru a fi trasabil, curat și fără surprize.</li>
+<li><strong>Mecanismul nativ de Autosync:</strong> Fossil dispune de
+modul <code>autosync</code> activat implicit. La fiecare
+<code>commit</code> sau <code>update</code>, depozitul se sincronizează
+automat cu depozitul central dacă acesta este configurat, eliminând
+rutina clasică repetitivă de
+<code>git fetch -&gt; git stash -&gt; git rebase -&gt; git stash pop -&gt; git push</code>.</li>
+<li><strong>Server Web încorporat fără configurare:</strong> Orice
+membru al echipei poate lansa instantaneu <code>fossil server</code> pe
+o mașină din rețeaua locală sau pe un VPS modest. Întreaga echipă
+beneficiază pe loc de o interfață web completă și securizată (cu
+utilizatori, permisiuni pe roluri, code review, tichete și pagini wiki),
+fără să fie nevoie de Nginx, Docker sau baze de date externe.</li>
+</ol>
+<h3 id="rolul-serverului-fossilsolomcp">Rolul serverului
+FossilSoloMCP</h3>
+<p>Acest server MCP acționează ca o punte de comunicație de mare viteză
+între modelele LLM și depozitele Fossil, expunând <strong>29 de unelte
+specializate</strong> prin protocolul standardizat MCP (Model Context
+Protocol).</p>
+<hr />
+<h2 id="2-istoric-origine-și-comparație-cu-agent-vc-mcp">2. Istoric,
+Origine și Comparație cu <code>agent-vc-mcp</code></h2>
+<h3 id="punctul-de-plecare-agent-vc-mcp">Punctul de Plecare:
+<code>agent-vc-mcp</code></h3>
+<p>Dezvoltarea acestui server a pornit inițial de la explorarea
+proiectului open-source <a
+href="https://github.com/ManbotHQ/agent-vc-mcp">agent-vc-mcp</a> (creat
+de ManBotHQ pe GitHub), o primă încercare de a oferi un server MCP
+pentru Fossil scris în <strong>TypeScript / Node.js</strong>.</p>
+<p>Deși conceptul de a oferi asistenților AI control asupra unui sistem
+de versionare a fost excelent, analiza codului sursă a scos la iveală
+limitări arhitecturale majore:</p>
+<h3 id="limitări-majore-ale-agent-vc-mcp">Limitări Majore ale
+<code>agent-vc-mcp</code>:</h3>
+<ol type="1">
+<li><strong>Model Sandbox Forțat și Rigid:</strong>
+<ul>
+<li><code>agent-vc-mcp</code> impunea un spațiu de lucru unic fix în
+<code>~/.agent-vc/workspace/</code> și o singură bază de date
+<code>~/.agent-vc/version_control.fossil</code>.</li>
+<li>Proiectele erau tratate forțat doar ca subfoldere
+(<code>workspace/proiect-1/</code>, <code>workspace/proiect-2/</code>)
+în interiorul aceluiași repository masiv. Nu exista posibilitatea de a
+gestiona depozite independente pentru proiectele reale deja existente pe
+disc.</li>
+</ul></li>
+<li><strong>Duplicarea Inutilă a Operațiunilor pe Fișiere:</strong>
+<ul>
+<li><code>agent-vc-mcp</code> amesteca versionarea cu operațiuni
+elementare de sistem de fișiere (<code>write_file</code>,
+<code>read_file</code>, <code>list_files</code>). Acestea erau
+redundante și intrau adesea în conflict cu uneltele native și avansate
+de fișiere deja puse la dispoziție de IDE-uri și asistenți AI.</li>
+</ul></li>
+<li><strong>Set Foarte Limitat de Unelte (Exact 10 unelte):</strong>
+<ul>
+<li>Oferă doar funcționalități rudimentare:
+<code>vc_init_project</code>, <code>vc_commit</code>,
+<code>vc_status</code>, <code>vc_diff</code>, cele 3 unelte de fișiere
+și un modul simplist de task-uri (<code>task_create</code>,
+<code>task_update</code>, <code>task_list</code>).</li>
+<li><strong>Lipsuri critice:</strong> Fără suport de ramuri
+(<code>branch</code>), fără etichete (<code>tag</code>), fără
+<code>stash</code>, fără inspecție granulară a istoricului pe fișiere
+(<code>finfo</code>), fără posibilitatea de a citi conținut istoric
+(<code>cat</code>), fără anulare sigură (<code>undo</code>,
+<code>revert</code>), fără configurare depozit (<code>settings</code>)
+și fără niciun suport pentru sistemul <strong>Wiki</strong>!</li>
+</ul></li>
+<li><strong>Instabilitate și Blocaje Frecvente pe Windows:</strong>
+<ul>
+<li>Funcția de lansare a proceselor folosea <code>spawn</code> fără
+timeout și fără închiderea/redirecționarea intrării standard
+(<code>stdin</code>). Dacă <code>fossil.exe</code> solicita vreo
+confirmare interactivă (de exemplu pentru fișiere binare noi sau
+avertismente CRLF), procesul se bloca la infinit (hang).</li>
+<li>Comanda de configurare a <code>crlf-glob *</code> eșua din cauza
+expandării wildcard-urilor de către runtime-ul Windows.</li>
+</ul></li>
+<li><strong>Lipsa Flexibilității CWD Dinamic:</strong>
+<ul>
+<li>Calea spațiului de lucru era determinată static la lansarea
+serverului (prin variabila de mediu <code>AGENT_VC_WORKSPACE</code>).
+Nicio unealtă nu accepta un parametru de cale, astfel încât serverul nu
+putea opera dinamic pe multiple proiecte.</li>
+</ul></li>
+<li><strong>Ecosistemul Node.js / TypeScript:</strong>
+<ul>
+<li>Necesita Node.js, <code>npx</code> și pachete
+<code>node_modules</code> voluminoase, complicând integrarea într-un
+mediu bazat pe Python și automatizări AI.</li>
+</ul></li>
+</ol>
+<hr />
+<h3 id="trecerea-la-fossilsolomcp-rescriere-și-maturizare">Trecerea la
+<code>FossilSoloMCP</code>: Rescriere și Maturizare</h3>
+<p>S-a luat decizia strategică de a rescrie serverul complet de la zero
+în <strong>Python</strong>, folosind framework-ul performant
+<strong>FastMCP</strong>.</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Caracteristică</th>
+<th style="text-align: left;"><code>agent-vc-mcp</code> (Original)</th>
+<th style="text-align: left;"><code>FossilSoloMCP</code> (Proiectul
+Curent)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Limbaj &amp; Runtime</strong></td>
+<td style="text-align: left;">TypeScript / Node.js
+(<code>npx</code>)</td>
+<td style="text-align: left;"><strong>Python 3.14+ (FastMCP)</strong>
+gestionat ultrarapid prin <code>uv</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Număr Unelte Expuse</strong></td>
+<td style="text-align: left;">Exact 10 unelte</td>
+<td style="text-align: left;"><strong>29 de unelte complete și
+specializate</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Gestiune Directoare
+(CWD)</strong></td>
+<td style="text-align: left;">Static, fixat la pornire via env vars</td>
+<td style="text-align: left;"><strong>Dinamic per apel
+(<code>cwd</code>)</strong> pe toate cele 29 de unelte</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Organizare Depozite</strong></td>
+<td style="text-align: left;">Un singur repo comun în
+<code>~/.agent-vc/</code></td>
+<td style="text-align: left;"><strong>Repozitorii independente</strong>,
+stocate curat în <code>.fossil_repositories/</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operațiuni pe
+Fișiere</strong></td>
+<td style="text-align: left;">Forța wrapper-e rigide
+(<code>write_file</code>, etc.)</td>
+<td style="text-align: left;"><strong>Decuplat total:</strong> se
+bazează pe uneltele native ale agentului</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Inspecție Istorică
+Avansată</strong></td>
+<td style="text-align: left;">Niciuna (doar <code>vc_diff</code>
+global)</td>
+<td style="text-align: left;"><strong><code>fossil_timeline</code> (cu
+filtre), <code>fossil_finfo</code>, <code>fossil_cat</code>
+istoric</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ramuri &amp;
+Etichete</strong></td>
+<td style="text-align: left;">Inexistente</td>
+<td style="text-align: left;"><strong>Suport complet
+(<code>fossil_branch</code>, <code>fossil_tag</code>)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Stashing &amp;
+Revert</strong></td>
+<td style="text-align: left;">Inexistente</td>
+<td style="text-align: left;"><strong>Gestiune completă
+(<code>fossil_stash</code>, <code>fossil_revert</code>,
+<code>fossil_undo</code>)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sistem Wiki (Memorie
+AI)</strong></td>
+<td style="text-align: left;">Inexistent</td>
+<td style="text-align: left;"><strong>Integrat
+(<code>fossil_wiki_ls</code>, <code>wiki_read</code>,
+<code>wiki_write</code>)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sistem Ticketing</strong></td>
+<td style="text-align: left;">Modul proprietar simplist</td>
+<td style="text-align: left;"><strong>Integrat nativ Fossil cu fallback
+inteligent SQL</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Reziliență Windows &amp;
+Anti-Hang</strong></td>
+<td style="text-align: left;">Blocaje frecvente în consolă</td>
+<td style="text-align: left;"><strong><code>stdin=DEVNULL</code>,
+auto-răspuns <code>a</code> la prompturi, timeout 30s</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Gestiune CRLF / LF</strong></td>
+<td style="text-align: left;">Erori la comanda de setare</td>
+<td style="text-align: left;"><strong>Injecție SQL directă în SQLite +
+auto-generare <code>.editorconfig</code></strong></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="3-prerechizite-și-instalare">3. Prerechizite și Instalare</h2>
+<h3 id="1-prerechizite-sistem">1. Prerechizite Sistem</h3>
+<ol type="1">
+<li><strong>Utilitarul Fossil SCM:</strong>
+<ul>
+<li>Descărcați executabilul oficial pentru sistemul dvs. de operare
+(Windows, Linux sau macOS) de la <a
+href="https://fossil-scm.org/"><span>https://fossil-scm.org/</span></a>.</li>
+<li>Amplasați executabilul într-un director din sistem (de exemplu
+<code>C:\Program Files\Fossil\</code> pe Windows sau
+<code>/usr/local/bin/</code> pe Linux/macOS).</li>
+<li>Asigurați-vă că directorul respectiv este inclus în variabila de
+mediu <code>PATH</code>.</li>
+<li>Verificați disponibilitatea în consolă:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fossil</span> version</span></code></pre></div></li>
+</ul></li>
+<li><strong>Python &amp; <code>uv</code>:</strong>
+<ul>
+<li>Se recomandă <strong>Python 3.14 sau mai nou</strong>.</li>
+<li>Managerul modern de medii și pachete <code>uv</code> instalat în
+sistem (sau mediul Python standard).</li>
+</ul></li>
+</ol>
+<hr />
+<h3 id="2-configurare-în-clienți-mcp">2. Configurare în Clienți MCP</h3>
+<p>Configurarea se realizează prin adăugarea definiției serverului în
+fișierul de configurare al clientului MCP dorit
+(<code>mcp_config.json</code>, <code>claude_desktop_config.json</code>,
+etc.).</p>
+<h4 id="exemplu-universal-pentru-windows">Exemplu Universal pentru
+Windows:</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fossil-scm&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uv&quot;</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;run&quot;</span><span class="ot">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;--directory&quot;</span><span class="ot">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;C:/Cale/Catre/FossilSoloMCP&quot;</span><span class="ot">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;fossil-scm-mcp&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h4 id="exemplu-universal-pentru-linux--macos">Exemplu Universal pentru
+Linux / macOS:</h4>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fossil-scm&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uv&quot;</span><span class="fu">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;run&quot;</span><span class="ot">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;--directory&quot;</span><span class="ot">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;/home/utilizator/proiecte/FossilSoloMCP&quot;</span><span class="ot">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;fossil-scm-mcp&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="tip">
+<div class="title">
+<p>Tip</p>
+</div>
+<p><strong>Înlocuiți calea:</strong> Înlocuiți
+<code>"C:/Cale/Catre/FossilSoloMCP"</code> sau
+<code>"/home/utilizator/proiecte/FossilSoloMCP"</code> cu calea absolută
+reală unde ați clonat sau salvat proiectul pe calculatorul dvs.</p>
+<p><strong>Despre argumentul <code>--repository</code>:</strong>
+Serverul funcționează complet dinamic pe baza parametrului
+<code>cwd</code> transmis la fiecare apel de unealtă. Prin urmare, nu
+este necesar să specificați un depozit static la pornirea
+serverului.</p>
+</div>
+<hr />
+<h2 id="4-arhitectura-și-organizarea-depozitelor">4. Arhitectura și
+Organizarea Depozitelor</h2>
+<h3 id="convenția-fossil_repositories">Convenția
+<code>.fossil_repositories</code></h3>
+<p>Pentru a păstra rădăcina proiectelor curată și pentru a evita
+stocarea de baze de date voluminoase în interiorul directorului de
+lucru, serverul implementează automat o convenție curată:</p>
+<ol type="1">
+<li><strong>Baza de Date a Depozitului (<code>.fossil</code>):</strong>
+<ul>
+<li>Este salvată într-un director ascuns
+<code>.fossil_repositories/</code> creat automat în folderul părinte al
+spațiului de lucru (de exemplu:
+<code>../.fossil_repositories/NumeProiect.fossil</code>).</li>
+</ul></li>
+<li><strong>Directorul de Lucru (Checkout):</strong>
+<ul>
+<li>Conține codul sursă, documentația și fișierul ascuns de legătură al
+Fossil denumit <code>_FOSSIL_</code> (pe Windows) sau
+<code>.fslckout</code> (pe Linux/macOS).</li>
+<li>Acest fișier conține calea către baza de date SQLite a depozitului
+asociat.</li>
+</ul></li>
+</ol>
+<h3 id="deschiderea-interfeței-grafice-web">Deschiderea Interfeței
+Grafice Web</h3>
+<p>Fossil include nativ un server HTTP și o interfață web completă.
+Pentru a explora depozitul vizual în browser, este suficient să rulați
+în terminalul deschis în directorul proiectului:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fossil</span> ui</span></code></pre></div>
+<p><em>(Opțional, pe Windows, puteți rula scriptul utilitar
+<code>open-ui-fossil.bat</code> inclus în rădăcină).</em></p>
+<p>Comanda deschide automat browserul implicit la adresa
+<code>http://localhost:8080</code>, oferind acces la:</p>
+<ul>
+<li><strong>Timeline:</strong> Arborele grafic al tuturor ramurilor,
+tag-urilor și commit-urilor.</li>
+<li><strong>Files:</strong> Navigare prin fișiere la orice revizie
+istorică, cu diff-uri și adnotare (blame).</li>
+<li><strong>Tickets:</strong> Vizualizarea și editarea sarcinilor și
+bug-urilor.</li>
+<li><strong>Wiki:</strong> Navigarea prin articolele și documentația
+proiectului.</li>
+</ul>
+<hr />
+<h2
+id="5-ghid-de-lucru-pentru-agenți-ai-fluxuri-universale-recomandate">5.
+Ghid de Lucru pentru Agenți AI (Fluxuri Universale Recomandate)</h2>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>Regula de Aur pentru Agenți:</strong> La apelarea oricărui
+tool din serverul <code>fossil-scm</code>, includeți
+<strong>întotdeauna</strong> parametrul <code>cwd</code> setat explicit
+la calea absolută a directorului pe care operați (de exemplu:
+<code>cwd="C:/Proiecte/AplicatiaMea"</code>).</p>
+</div>
+<hr />
+<h3
+id="regulă-recomandată-pentru-agentul-ai-system-prompt--reguli-de-lucru">Regulă
+Recomandată pentru Agentul AI (System Prompt / Reguli de lucru)</h3>
+<p>Dacă doriți ca asistentul dvs. AI să folosească automat și corect
+serverul Fossil în orice client (Claude Desktop, Cursor, Antigravity
+etc.), puteți adăuga următoarea regulă în instrucțiunile de sistem:</p>
+<pre class="text"><code>Pentru versionare, tichete și documentație internă, folosește uneltele serverului MCP fossil-scm.
+La orice apel, transmite întotdeauna parametrul &#39;cwd&#39; setat la calea directorului proiectului curent.
+Înainte de a face modificări, verifică starea cu fossil_status. La finalul fiecărei sarcini rezolvate,
+înregistrează fișierele cu fossil_add și comite modificările cu fossil_commit oferind un mesaj clar.</code></pre>
+<hr />
+<h3 id="fluxul-1-inițializarea-unui-proiect-nou">Fluxul 1: Inițializarea
+unui Proiect Nou</h3>
+<p>Când utilizatorul cere începerea unui proiect nou cu versionare
+Fossil:</p>
+<ol type="1">
+<li>Agentul apelează <code>fossil_init</code>:
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;project_name&quot;</span><span class="fu">:</span> <span class="st">&quot;AplicatiaMea&quot;</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;C:/Proiecte/AplicatiaMea&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<em>Ce face serverul automat:</em>
+<ul>
+<li>Creează directorul <code>.fossil_repositories/</code> în folderul
+părinte dacă nu există.</li>
+<li>Inițializează <code>AplicatiaMea.fossil</code>.</li>
+<li>Deschide depozitul în folderul de lucru
+(<code>fossil open</code>).</li>
+<li>Aplică setările automate anti-CRLF direct în SQL
+(<code>crlf-glob = *</code>).</li>
+<li>Generează automat fișierul <code>.editorconfig</code>
+(<code>end_of_line = lf</code>) și îl adaugă în versionare.</li>
+</ul></li>
+</ol>
+<hr />
+<h3 id="fluxul-2-ciclul-standard-de-modificare-și-commit">Fluxul 2:
+Ciclul Standard de Modificare și Commit</h3>
+<p>Pe parcursul dezvoltării sau depanării, agentul urmează un ciclu
+standard:</p>
+<ol type="1">
+<li><strong>Verifică starea fișierelor:</strong>
+<code>fossil_status(cwd="...")</code></li>
+<li><strong>Inspectează modificările concrete (diff):</strong>
+<code>fossil_diff(cwd="...")</code></li>
+<li><strong>Înregistrează fișierele noi:</strong>
+<ul>
+<li>Pentru fișiere punctuale:
+<code>fossil_add(files=["src/main.py"], cwd="...")</code></li>
+<li>Pentru sincronizare automată (fișiere noi și șterse):
+<code>fossil_addremove(cwd="...")</code></li>
+</ul></li>
+<li><strong>Comiterea în depozit:</strong>
+<code>fossil_commit(message="Implementare modul autentificare", cwd="...")</code>
+<em>(Serverul rezolvă automat fără blocaje orice prompt de
+confirmare).</em></li>
+</ol>
+<hr />
+<h3 id="fluxul-3-explorare-istorică-și-investigare-fără-risc">Fluxul 3:
+Explorare Istorică și Investigare Fără Risc</h3>
+<p>Spre deosebire de alte sisteme unde agentul riscă să suprascrie
+spațiul de lucru când vrea să consulte codul din trecut:</p>
+<ul>
+<li><strong><code>fossil_timeline</code>:</strong> Afișează istoricul
+recent al evenimentelor. Suportă filtrarea doar pe un anumit fișier
+(<code>path="src/main.py"</code>).</li>
+<li><strong><code>fossil_finfo</code>:</strong> Afișează toate
+modificările suferite de-a lungul timpului de un singur fișier
+specificat.</li>
+<li><strong><code>fossil_cat</code> (Arma secretă):</strong> Permite
+citirea conținutului unui fișier direct dintr-o revizie istorică sau
+tag, <strong>fără a atinge sau deranja fișierele de pe disc din spațiul
+de lucru curent</strong>:
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;file&quot;</span><span class="fu">:</span> <span class="st">&quot;src/main.py&quot;</span><span class="fu">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;revision&quot;</span><span class="fu">:</span> <span class="st">&quot;f731ad3851&quot;</span><span class="fu">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="fluxul-4-gestiunea-sarcinilor-ticketing">Fluxul 4: Gestiunea
+Sarcinilor (Ticketing)</h3>
+<p>Fossil are un sistem complet de ticketing stocat în baza de date:</p>
+<ol type="1">
+<li><strong>Listare tichete existente:</strong>
+<code>fossil_ticket_list(cwd="...")</code></li>
+<li><strong>Creare sarcină nouă / raport de bug:</strong>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Remediere eroare de timeout la apeluri asincrone&quot;</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;open&quot;</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;additional_fields&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;Code_Defect&quot;</span><span class="fu">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;severity&quot;</span><span class="fu">:</span> <span class="st">&quot;High&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<li><strong>Închidere sau actualizare tichet:</strong>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;ticket_id&quot;</span><span class="fu">:</span> <span class="st">&quot;a1b2c3d4&quot;</span><span class="fu">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;field_name&quot;</span><span class="fu">:</span> <span class="st">&quot;status&quot;</span><span class="fu">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;field_value&quot;</span><span class="fu">:</span> <span class="st">&quot;closed&quot;</span><span class="fu">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ol>
+<hr />
+<h3 id="fluxul-5-documentație-ca-memorie-persistentă-wiki">Fluxul 5:
+Documentație ca Memorie Persistentă (Wiki)</h3>
+<p>Paginile Wiki din Fossil sunt stocate direct în depozit și nu depind
+de fișiere de pe disc:</p>
+<ol type="1">
+<li><strong>Listare pagini existente:</strong>
+<code>fossil_wiki_ls(cwd="...")</code></li>
+<li><strong>Citire documentație:</strong>
+<code>fossil_wiki_read(page_name="ArhitecturaSistemului", cwd="...")</code></li>
+<li><strong>Salvare decizii tehnice pentru sesiunile viitoare:</strong>
+<code>fossil_wiki_write(page_name="DeciziiDesign", content="# Decizii...", cwd="...")</code></li>
+</ol>
+<hr />
+<h2 id="6-referința-completă-a-celor-29-de-instrumente-mcp">6. Referința
+Completă a Celor 29 de Instrumente MCP</h2>
+<h3 id="a-version-control-20-instrumente">A. Version Control (20
+Instrumente)</h3>
+<h4 id="1-fossil_status">1. <code>fossil_status</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Afișează starea curentă a fișierelor din
+spațiul de lucru (modificate, adăugate, lipsă, fișiere
+netrackuite).</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>cwd</code> <em>(string, opțional)</em>: Calea directorului de
+lucru.</li>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Dacă
+include fișierele/folderele ascunse (care încep cu punct).</li>
+<li><code>brief</code> <em>(boolean, default: false)</em>: Afișare
+concisă doar cu cuvinte cheie.</li>
+<li><code>ignore</code> <em>(string, opțional)</em>: Tipare glob
+separate prin virgulă pentru fișiere de ignorat.</li>
+</ul></li>
+</ul>
+<h4 id="2-fossil_diff">2. <code>fossil_diff</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Afișează diferențele de cod (diff) între
+modificările din spațiul de lucru și depozit sau între revizii
+istorice.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+<li><code>files</code> <em>(array de string-uri, opțional)</em>: Listă
+specifică de fișiere de comparat.</li>
+<li><code>from_version</code> <em>(string, opțional)</em>: Revizia de
+pornire (<code>--from</code>).</li>
+<li><code>to_version</code> <em>(string, opțional)</em>: Revizia de
+destinație (<code>--to</code>).</li>
+<li><code>branch</code> <em>(string, opțional)</em>: Compară
+modificările ramurii specificate.</li>
+<li><code>brief</code> <em>(boolean, default: false)</em>: Listează doar
+numele fișierelor modificate fără diff-ul complet.</li>
+<li><code>ignore_whitespace</code> <em>(boolean, default: false)</em>:
+Ignoră modificările cauzate de spații/taburi (<code>-w</code>).</li>
+</ul></li>
+</ul>
+<h4 id="3-fossil_cat">3. <code>fossil_cat</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Extrage și returnează conținutul textual
+al unui fișier dintr-o revizie istorică specificată, fără a modifica
+spațiul de lucru local.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>file</code> <em>(string, obligatoriu)</em>: Calea relativă a
+fișierului.</li>
+<li><code>revision</code> <em>(string, obligatoriu)</em>: Hash-ul,
+eticheta sau ramura reviziei dorite.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="4-fossil_finfo">4. <code>fossil_finfo</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Returnează istoricul detaliat de
+modificări pentru un singur fișier specificat. Traversează transparent
+evenimentele de redenumire efectuate cu <code>fossil_mv</code>.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>file</code> <em>(string, obligatoriu)</em>: Calea
+fișierului.</li>
+<li><code>limit</code> <em>(integer, opțional)</em>: Numărul maxim de
+revizii afișate (<code>-n</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="5-fossil_add">5. <code>fossil_add</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Programează adăugarea unuia sau mai
+multor fișiere/directoare în versionare.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>files</code> <em>(array de string-uri, obligatoriu)</em>:
+Lista de căi către fișiere sau directoare.</li>
+<li><code>force</code> <em>(boolean, default: true)</em>: Forțează
+adăugarea chiar dacă se potrivesc cu un tipar
+<code>ignore-glob</code>.</li>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Include
+fișiere ascunse la parcurgere recursivă.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="6-fossil_rm">6. <code>fossil_rm</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Elimină fișiere din controlul
+versiunilor.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>files</code> <em>(array de string-uri, obligatoriu)</em>:
+Lista fișierelor de eliminat.</li>
+<li><code>force</code> <em>(boolean, default: false)</em>: Forțează
+ștergerea fără avertismente.</li>
+<li><code>keep</code> <em>(boolean, default: false)</em>: Păstrează
+fișierele fizic pe disc, eliminându-le doar din versionare.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="7-fossil_mv">7. <code>fossil_mv</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Redenumește sau mută un fișier ori
+director în depozit și pe disc. Înregistrează explicit evenimentul
+<code>RENAME</code> în graful de versiuni (DAG), asigurând
+trasabilitatea completă a istoricului prin
+<code>fossil_finfo</code>.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>old_name</code> <em>(string, obligatoriu)</em>: Calea sursă a
+fișierului sau directorului.</li>
+<li><code>new_name</code> <em>(string, obligatoriu)</em>: Calea
+destinație a fișierului sau directorului.</li>
+<li><code>hard</code> <em>(boolean, default: true)</em>: Dacă
+mută/redenumește fișierul fizic pe disc (<code>--hard</code>). Dacă este
+False, înregistrează doar intenția în manifest
+(<code>--soft</code>).</li>
+<li><code>case_sensitive</code> <em>(boolean, opțional)</em>: Forțează
+respectarea majusculelor/minusculelor
+(<code>--case-sensitive 1/0</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="8-fossil_addremove">8. <code>fossil_addremove</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Scanează spațiul de lucru și adaugă
+automat fișierele noi, eliminându-le pe cele șterse de pe disc.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Include
+dotfiles.</li>
+<li><code>ignore</code> <em>(string, opțional)</em>: Tipare glob de
+ignorat.</li>
+<li><code>clean</code> <em>(boolean, default: false)</em>: Șterge
+fișierele suplimentare netrackuite.</li>
+<li><code>reset</code> <em>(boolean, default: false)</em>: Resetează
+starea add/remove.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="9-fossil_extras">9. <code>fossil_extras</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Listează toate fișierele din directorul
+curent care nu sunt sub controlul versiunilor.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Include
+fișierele ascunse.</li>
+<li><code>ignore</code> <em>(string, opțional)</em>: Filtru glob
+suplimentar.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="10-fossil_clean">10. <code>fossil_clean</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Șterge fișierele netrackate și temporare
+din arborele de lucru (<code>fossil clean</code>).</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>all_files</code> <em>(boolean, default: false)</em>: Forțează
+ștergerea fără confirmare interactivă (<code>-f</code>).</li>
+<li><code>dry_run</code> <em>(boolean, default: false)</em>: Simulare
+fără ștergere; afișează lista fișierelor care ar fi eliminate
+(<code>-n</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="11-fossil_revert">11. <code>fossil_revert</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Anulează modificările nesalvate
+dintr-unul sau mai multe fișiere, readucându-le la starea din
+depozit.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>files</code> <em>(array de string-uri, obligatoriu)</em>:
+Fișierele de readus la starea inițială.</li>
+<li><code>revision</code> <em>(string, opțional)</em>: Revizia la care
+să fie readuse (implicit checkout-ul curent).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="12-fossil_stash">12. <code>fossil_stash</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Salvează temporar modificările locale
+nesalvate pentru a lăsa spațiul curat, permițând reaplicarea lor
+ulterioară.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>action</code> <em>(string, default: "save")</em>: Acțiunea
+dorită: <code>"save"</code>, <code>"snapshot"</code>,
+<code>"list"</code>, <code>"pop"</code>, <code>"apply"</code>,
+<code>"drop"</code>, <code>"diff"</code>.</li>
+<li><code>comment</code> <em>(string, opțional)</em>: Notiță pentru
+stash.</li>
+<li><code>stash_id</code> <em>(integer, opțional)</em>: Numărul de
+identificare al stash-ului.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="13-fossil_tag">13. <code>fossil_tag</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Gestionează etichete simbolice asociate
+anumitor revizii (check-in-uri).</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>action</code> <em>(string, default: "list")</em>:
+<code>"add"</code>, <code>"cancel"</code>, <code>"list"</code>.</li>
+<li><code>tag_name</code> <em>(string, opțional)</em>: Numele etichetei
+(ex: <code>"v1.0.0"</code>).</li>
+<li><code>checkin</code> <em>(string, opțional)</em>: Revizia căreia i
+se atașează tag-ul.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="14-fossil_commit">14. <code>fossil_commit</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Înregistrează definitiv modificările
+într-un nou check-in în depozit.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>message</code> <em>(string, obligatoriu)</em>: Mesajul de
+commit.</li>
+<li><code>files</code> <em>(array de string-uri, opțional)</em>: Fișiere
+specifice de inclus în commit.</li>
+<li><code>branch</code> <em>(string, opțional)</em>: Numele unei ramuri
+noi pe care să fie plasat commit-ul (<code>--branch</code>).</li>
+<li><code>no_warnings</code> <em>(boolean, default: true)</em>: Omite
+avertismentele de conținut și CRLF.</li>
+<li><code>allow_empty</code> <em>(boolean, default: false)</em>: Permite
+commit chiar dacă nu există modificări.</li>
+<li><code>user_override</code> <em>(string, opțional)</em>:
+Înregistrează un alt nume de autor.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="15-fossil_timeline">15. <code>fossil_timeline</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Afișează istoricul cronologic al
+acțiunilor și commit-urilor din proiect.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>limit</code> <em>(integer, default: 20)</em>: Numărul de
+evenimente afișate.</li>
+<li><code>path</code> <em>(string, opțional)</em>: Filtrează timeline-ul
+doar pentru un anumit fișier/director (<code>-p</code>).</li>
+<li><code>type_filter</code> <em>(string, opțional)</em>: Filtru de tip:
+<code>"ci"</code> (checkins), <code>"w"</code> (wiki), <code>"t"</code>
+(tickets), <code>"e"</code> (events) (<code>-t</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="16-fossil_info">16. <code>fossil_info</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Afișează informații detaliate despre
+depozit, checkout-ul activ sau o revizie anume.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>target</code> <em>(string, opțional)</em>: Hash-ul, eticheta
+sau fișierul de inspectat.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="17-fossil_branch">17. <code>fossil_branch</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Gestionează ramurile de dezvoltare
+paralele.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>action</code> <em>(string, default: "list")</em>:
+<code>"list"</code> sau <code>"new"</code>.</li>
+<li><code>branch_name</code> <em>(string, opțional)</em>: Numele noii
+ramuri la <code>action="new"</code>.</li>
+<li><code>basis</code> <em>(string, opțional)</em>: Punctul de plecare
+(check-in de bază).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="18-fossil_merge">18. <code>fossil_merge</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Fuzionează o altă ramură sau un commit
+specific în spațiul de lucru curent (<code>fossil merge</code>).</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>branch_or_version</code> <em>(string, obligatoriu)</em>:
+Numele ramurii sau hash-ul commit-ului de integrat.</li>
+<li><code>integrate</code> <em>(boolean, default: false)</em>: Dacă este
+True (<code>--integrate</code>), închide automat ramura sursă după
+fuziune la următorul commit.</li>
+<li><code>dry_run</code> <em>(boolean, default: false)</em>: Simulează
+fuziunea fără a modifica fișierele locale (<code>-n</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="19-fossil_update">19. <code>fossil_update</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Actualizează fișierele din spațiul de
+lucru la cea mai recentă revizie sau comută pe o altă
+ramură/versiune.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>target</code> <em>(string, opțional)</em>: Versiunea, ramura
+sau eticheta către care se comută.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="20-fossil_undo">20. <code>fossil_undo</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Anulează ultima operațiune de
+<code>update</code>, <code>revert</code> sau <code>merge</code>
+efectuată în spațiul de lucru.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>dry_run</code> <em>(boolean, default: false)</em>: Afișează ce
+ar fi anulat fără a executa operațiunea.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="b-administrare--depozit-3-instrumente">B. Administrare &amp;
+Depozit (3 Instrumente)</h3>
+<h4 id="21-fossil_init">21. <code>fossil_init</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Creează și configurează o nouă bază de
+date Fossil și o deschide automat în directorul indicat.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>db_name</code> <em>(string, opțional)</em>: Numele fișierului
+depozitului (implicit numele folderului curent).</li>
+<li><code>project_name</code> <em>(string, opțional)</em>: Numele logic
+al proiectului.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="22-fossil_open">22. <code>fossil_open</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Deschide un depozit Fossil existent în
+directorul specificat.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>db_name</code> <em>(string, obligatoriu)</em>: Numele sau
+calea depozitului <code>.fossil</code>.</li>
+<li><code>force</code> <em>(boolean, default: false)</em>: Forțează
+deschiderea chiar dacă directorul nu e gol (<code>-f</code>).</li>
+<li><code>keep</code> <em>(boolean, default: false)</em>: Păstrează
+fișierele locale existente (<code>-k</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="23-fossil_settings">23. <code>fossil_settings</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Consultă sau modifică proprietățile și
+setările depozitului (<code>crlf-glob</code>, <code>binary-glob</code>,
+<code>ignore-glob</code>, <code>autosync</code> etc.).</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>name</code> <em>(string, opțional)</em>: Numele proprietății
+(dacă lipsește, listează toate setările).</li>
+<li><code>value</code> <em>(string, opțional)</em>: Noua valoare de
+configurat.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="c-sistemul-de-ticketing-3-instrumente">C. Sistemul de Ticketing
+(3 Instrumente)</h3>
+<h4 id="24-fossil_ticket_list">24. <code>fossil_ticket_list</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Listează tichetele existente în depozit
+(cu fallback automat pe interogare directă SQLite dacă rapoartele Fossil
+nu sunt configurate).</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>report</code> <em>(integer, default: 1)</em>: Numărul
+raportului standard Fossil.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="25-fossil_ticket_create">25.
+<code>fossil_ticket_create</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Deschide un tichet nou în sistemul de
+tracking al depozitului.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>title</code> <em>(string, obligatoriu)</em>: Titlul sau
+rezumatul sarcinii/erorii.</li>
+<li><code>status</code> <em>(string, default: "open")</em>: Starea
+inițială (<code>"open"</code>, <code>"in_progress"</code>,
+<code>"closed"</code> etc.).</li>
+<li><code>additional_fields</code> <em>(dicționar / obiect JSON,
+opțional)</em>: Câmpuri adiționale (ex: <code>type</code>,
+<code>severity</code>, <code>subsystem</code>,
+<code>description</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="26-fossil_ticket_update">26.
+<code>fossil_ticket_update</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Modifică un câmp sau statusul unui
+tichet existent.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>ticket_id</code> <em>(string, obligatoriu)</em>:
+Identificatorul UUID al tichetului (sau primele caractere).</li>
+<li><code>field_name</code> <em>(string, obligatoriu)</em>: Numele
+câmpului de modificat (ex: <code>"status"</code>,
+<code>"comment"</code>).</li>
+<li><code>field_value</code> <em>(string, obligatoriu)</em>: Noua
+valoare atribuită câmpului.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="d-sistemul-wiki-3-instrumente">D. Sistemul Wiki (3
+Instrumente)</h3>
+<h4 id="27-fossil_wiki_ls">27. <code>fossil_wiki_ls</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Returnează lista tuturor paginilor wiki
+existente în depozit.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="28-fossil_wiki_read">28. <code>fossil_wiki_read</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Citește și returnează conținutul complet
+în format text/markdown al paginii wiki solicitate.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>page_name</code> <em>(string, obligatoriu)</em>: Numele
+paginii wiki.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="29-fossil_wiki_write">29. <code>fossil_wiki_write</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Creează o pagină wiki nouă sau
+actualizează conținutul unei pagini existente în depozit.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>page_name</code> <em>(string, obligatoriu)</em>: Numele
+paginii wiki.</li>
+<li><code>content</code> <em>(string, obligatoriu)</em>: Conținutul
+Markdown sau text al paginii.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="7-particularități-windows--soluții-tehnice-încorporate">7.
+Particularități Windows &amp; Soluții Tehnice Încorporate</h2>
+<p>Dezvoltarea pe sisteme de operare Windows ridică provocări
+particulare pentru utilitare portate din lumea UNIX. Serverul
+<code>FossilSoloMCP</code> include măsuri de reziliență construite
+special:</p>
+<h3 id="1-problema-expandării-wildcard-urilor-la-crlf-glob-">1. Problema
+Expandării Wildcard-urilor la <code>crlf-glob "*"</code></h3>
+<ul>
+<li><strong>Fenomenul:</strong> Pe Windows, runtime-ul MSVC/MinGW al
+<code>fossil.exe</code> expandează automat caracterele <code>*</code>
+înainte de funcția <code>main()</code>. Comanda
+<code>fossil settings crlf-glob "*"</code> ajungea la Fossil ca o listă
+cu toate fișierele din folder, declanșând erori de sintaxă.</li>
+<li><strong>Soluția:</strong> Serverul aplică setarea direct în baza de
+date a depozitului prin SQL nativ:
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">REPLACE</span> <span class="kw">INTO</span> config(name,<span class="fu">value</span>) <span class="kw">VALUES</span>(<span class="st">&#39;crlf-glob&#39;</span>,<span class="st">&#39;*&#39;</span>)</span></code></pre></div>
+Ocolind complet CLI-ul, configurarea este 100% sigură și atomică.</li>
+</ul>
+<h3 id="2-păstrarea-standardului-lf-prin-editorconfig">2. Păstrarea
+Standardului LF prin <code>.editorconfig</code></h3>
+<ul>
+<li>Deși setarea <code>crlf-glob = *</code> dezactivează blocajele de
+commit, fișierele cu terminatori Windows (<code>CRLF</code>) pot genera
+diff-uri artificiale.</li>
+<li>Serverul generează automat la <code>fossil_open</code> un fișier
+<code>.editorconfig</code> cu regula <code>end_of_line = lf</code>,
+asigurând ca editoarele de cod să salveze curat cu terminatori
+standardizați UNIX.</li>
+</ul>
+<h3 id="3-protecție-anti-hang-și-timeout-de-siguranță">3. Protecție
+Anti-Hang și Timeout de Siguranță</h3>
+<ul>
+<li>Orice proces CLI apelat are <code>stdin</code> redirecționat către
+<code>subprocess.DEVNULL</code> când nu primește date explicite,
+prevenind blocarea la prompturi interactive.</li>
+<li>La <code>fossil_commit</code>, serverul trimite automat răspunsul
+<code>a\n</code> pe intrarea standard pentru a valida prompturile legate
+de fișiere binare sau avertismente.</li>
+<li>Toate apelurile de proces au timeout fixat la 30 de secunde, cu
+capturare completă de <code>stderr</code> și cod de retur pentru
+diagnosticare imediată.</li>
+</ul>
+<hr />
+<h2 id="8-bune-practici--sfaturi-de-lucru">8. Bune Practici &amp;
+Sfaturi de Lucru</h2>
+<ol type="1">
+<li><strong>Commit-uri Atomice și Explicite:</strong>
+<ul>
+<li>Efectuați commit-uri frecvente și concentrate după fiecare pas
+funcțional sau eroare remediată. Astfel, prin <code>fossil_undo</code>
+sau <code>fossil_revert</code>, puteți reveni oricând la un punct de
+stabilitate verificat.</li>
+</ul></li>
+<li><strong>Păstrarea Istoricului de Proiect în Wiki:</strong>
+<ul>
+<li>Folosiți paginile Wiki (<code>fossil_wiki_write</code>) pentru a
+consemna concluzii de arhitectură sau instrucțiuni de deployment. Fiind
+stocate în baza <code>.fossil</code>, ele nu se pierd și sunt accesibile
+direct în browser prin <code>fossil ui</code>.</li>
+</ul></li>
+<li><strong>Optimizare Avansată: Lucrul pe RAM Disk (Opțional):</strong>
+<ul>
+<li>Pentru dezvoltatorii care efectuează teste de anduranță, generare
+masivă de fișiere temporare sau rulare intensivă de scripturi scratch
+automate cu AI, utilizarea unui RAM Disk temporar este o modalitate
+excelentă de a proteja ciclurile de scriere ale SSD-urilor și de a
+obține viteze maxime de I/O. La finalizarea sesiunilor de lucru,
+modificările de cod validate pot fi sincronizate în directorul permanent
+al proiectului și salvate în depozit.</li>
+</ul></li>
+<li><strong>Automatizări Avansate cu Agenți AI:</strong>
+<ul>
+<li>În funcție de clientul sau IDE-ul utilizat (de exemplu reguli de
+lucru în Google Antigravity, <code>.cursorrules</code> în Cursor sau
+System Prompts în Claude Desktop), puteți defini instrucțiuni
+standardizate pentru ca agentul să versioneze automat fiecare modificare
+importantă fără intervenție manuală repetată.</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="9-licență--declinarea-responsabilității-no-warranty">9. Licență
+&amp; Declinarea Responsabilității (No Warranty)</h2>
+<h3 id="page_facing_up-licență">📄 Licență</h3>
+<p>Acest proiect este licențiat sub termenii licenței
+<strong>MIT</strong>. Consultă fișierul <a href="LICENSE">LICENSE</a>
+pentru detalii complete.</p>
+<hr />
+<h3 id="memo-garanție">📝 Garanție</h3>
+<p>Nu se oferă absolut niciun fel de garanție!</p>
+
+  </article>
+
+  <article id="lang-section-en" class="lang-content" lang="en">
+<p>⚠️ <strong>Note:</strong><br />
+✨ <strong>100% AI‑powered project 🪄</strong> — concept, analysis,
+code, testing, documentation — with the <strong>human</strong> 👨‍💻 in the
+loop as the <strong>big boss</strong> 👨‍💼 for <strong>control</strong>,
+<strong>fine‑tuning</strong>, and <strong>decisions</strong> 🤔😉🤫.</p>
+<hr />
+<h1
+id="user-manual--technical-reference-fossil-scm-mcp-fossilsolomcp">User
+Manual &amp; Technical Reference: Fossil SCM MCP (FossilSoloMCP)</h1>
+<p>Professional-grade Model Context Protocol (MCP) server for
+comprehensive integration of the <strong>Fossil SCM</strong> version
+control system with AI assistants and modern development
+environments.</p>
+<hr />
+<h2 id="1-introduction--project-philosophy">1. Introduction &amp;
+Project Philosophy</h2>
+<h3 id="what-is-fossil-scm">What is Fossil SCM?</h3>
+<p><a href="https://fossil-scm.org/">Fossil</a> is a distributed version
+control system created by D. Richard Hipp (author of the SQLite database
+engine). Unlike other systems (such as Git), Fossil includes natively
+within a single compact and self-contained executable:</p>
+<ul>
+<li><strong>File tree version control</strong> (Version Control).</li>
+<li><strong>Integrated bug and task tracking</strong> (Bug &amp; Task
+Ticketing).</li>
+<li><strong>Distributed project encyclopedia</strong> (Built-in Wiki
+system).</li>
+<li><strong>Full-featured graphical web interface</strong>
+(<code>fossil ui</code> / <code>fossil server</code>), instantly
+accessible from any browser.</li>
+<li><strong>Single-file storage format:</strong> The entire repository,
+complete commit history, tickets, and wiki articles are stored
+physically inside a single SQLite database file
+(<code>.fossil</code>).</li>
+</ul>
+<h3 id="why-fossil-for-solo-human--ai-development">Why Fossil for Solo
+Human + AI Development?</h3>
+<p>In modern development workflows where a developer collaborates
+closely with AI assistants (such as agents in Google Antigravity, Claude
+Desktop, Cursor, Continue, etc.), Fossil provides decisive
+advantages:</p>
+<ol type="1">
+<li><strong>Zero External Infrastructure Dependencies:</strong> No need
+for cloud accounts, third-party API keys, external tokens, or database
+servers. Everything is 100% local, private, and autonomous on your
+machine.</li>
+<li><strong>Native Persistent Memory for AI:</strong> The Wiki and
+Ticketing systems embedded directly inside the repository database allow
+the AI agent to read and record project status, architectural decisions,
+and bug history without polluting the source code directory.</li>
+<li><strong>Atomic Transactional Integrity:</strong> Powered by the
+SQLite engine, all operations are atomic, consistent, and resilient
+against accidental power failures or process crashes.</li>
+</ol>
+<h3 id="ideal-for-small-teams-without-gits-complexity">Ideal for Small
+Teams (Without Git's Complexity)</h3>
+<p>While optimized for solo AI-assisted development, Fossil is also an
+outstanding choice for <strong>small teams (2–10 collaborators)</strong>
+seeking simplicity, clarity, and the elimination of Git's frequently
+overwhelming bureaucracy:</p>
+<ol type="1">
+<li><strong>Complete "All-in-One" Solution:</strong> In a small team,
+configuring and maintaining separate services such as GitHub/GitLab,
+Jira/Trello (task tracking), Confluence/Notion (wiki documentation), or
+forum servers consumes unnecessary time and resources. Fossil bundles
+all these tools natively, organically tied to each commit and stored in
+the same SQLite repository.</li>
+<li><strong>Elimination of Git's Complex "Ceremonies":</strong> Concepts
+like <em>detached HEAD</em>, a separate staging index, confusing
+interactive <em>rebase</em> conflicts, hazardous <em>force push</em>
+operations, or lost orphaned commits are either absent or radically
+simplified in Fossil. Fossil's history is designed to be traceable,
+clean, and free of surprises.</li>
+<li><strong>Native Autosync Mechanism:</strong> Fossil features
+<code>autosync</code> enabled by default. On every <code>commit</code>
+or <code>update</code>, the repository automatically synchronizes with
+the central repository if configured, eliminating the repetitive routine
+of
+<code>git fetch -&gt; git stash -&gt; git rebase -&gt; git stash pop -&gt; git push</code>.</li>
+<li><strong>Zero-Configuration Built-in Web Server:</strong> Any team
+member can instantly launch <code>fossil server</code> on a local
+network machine or a modest VPS. The entire team instantly benefits from
+a full, secure web interface (with users, role-based permissions, code
+review, ticketing, and wiki pages) without needing Nginx, Docker, or
+external databases.</li>
+</ol>
+<h3 id="the-role-of-the-fossilsolomcp-server">The Role of the
+FossilSoloMCP Server</h3>
+<p>This MCP server acts as a high-speed communication bridge between
+Large Language Models (LLMs) and Fossil repositories, exposing
+<strong>29 specialized tools</strong> via the standardized Model Context
+Protocol (MCP).</p>
+<hr />
+<h2 id="2-history-origin-and-comparison-with-agent-vc-mcp">2. History,
+Origin, and Comparison with <code>agent-vc-mcp</code></h2>
+<h3 id="the-starting-point-agent-vc-mcp">The Starting Point:
+<code>agent-vc-mcp</code></h3>
+<p>The development of this server originally began with exploring the
+open-source project <a
+href="https://github.com/ManbotHQ/agent-vc-mcp">agent-vc-mcp</a>
+(created by ManBotHQ on GitHub), an early attempt to provide an MCP
+server for Fossil written in <strong>TypeScript / Node.js</strong>.</p>
+<p>While the concept of giving AI assistants control over a version
+control system was sound, source code analysis revealed severe
+architectural limitations:</p>
+<h3 id="major-limitations-of-agent-vc-mcp">Major Limitations of
+<code>agent-vc-mcp</code>:</h3>
+<ol type="1">
+<li><strong>Rigid, Enforced Sandbox Model:</strong>
+<ul>
+<li><code>agent-vc-mcp</code> forced a single fixed workspace at
+<code>~/.agent-vc/workspace/</code> and a single database at
+<code>~/.agent-vc/version_control.fossil</code>.</li>
+<li>Projects were forcibly treated as mere subfolders
+(<code>workspace/project-1/</code>, <code>workspace/project-2/</code>)
+inside the same massive repository. There was no ability to manage
+independent repositories for actual projects already residing across the
+disk.</li>
+</ul></li>
+<li><strong>Redundant Duplication of Filesystem Operations:</strong>
+<ul>
+<li><code>agent-vc-mcp</code> intermingled version control with basic
+filesystem operations (<code>write_file</code>, <code>read_file</code>,
+<code>list_files</code>). These were redundant and frequently conflicted
+with native, advanced file tools already provided by IDEs and AI
+assistants.</li>
+</ul></li>
+<li><strong>Severely Limited Toolset (Exactly 10 Tools):</strong>
+<ul>
+<li>It only offered rudimentary capabilities:
+<code>vc_init_project</code>, <code>vc_commit</code>,
+<code>vc_status</code>, <code>vc_diff</code>, 3 file tools, and a
+simplistic task module (<code>task_create</code>,
+<code>task_update</code>, <code>task_list</code>).</li>
+<li><strong>Critical Omissions:</strong> No branch support
+(<code>branch</code>), no tags (<code>tag</code>), no
+<code>stash</code>, no granular per-file history inspection
+(<code>finfo</code>), no historical content extraction
+(<code>cat</code>), no safe undo (<code>undo</code>,
+<code>revert</code>), no repository configuration
+(<code>settings</code>), and zero support for the <strong>Wiki</strong>
+system!</li>
+</ul></li>
+<li><strong>Instability and Frequent Freezes on Windows:</strong>
+<ul>
+<li>Process spawning used <code>spawn</code> without timeouts and
+without closing/redirecting standard input (<code>stdin</code>).
+Whenever <code>fossil.exe</code> requested interactive confirmation
+(e.g., for new binary files or CRLF line ending warnings), the process
+froze indefinitely (hung).</li>
+<li>The command setting <code>crlf-glob *</code> failed due to wildcard
+expansion by the Windows runtime.</li>
+</ul></li>
+<li><strong>Lack of Dynamic CWD Flexibility:</strong>
+<ul>
+<li>The workspace path was determined statically at server startup (via
+the <code>AGENT_VC_WORKSPACE</code> environment variable). No tool
+accepted a path parameter, preventing the server from dynamically
+managing multiple projects.</li>
+</ul></li>
+<li><strong>Node.js / TypeScript Ecosystem Overhead:</strong>
+<ul>
+<li>It required Node.js, <code>npx</code>, and bulky
+<code>node_modules</code> packages, complicating integration in
+environments built around Python and modern AI automation.</li>
+</ul></li>
+</ol>
+<hr />
+<h3
+id="transition-to-fossilsolomcp-complete-rewrite--maturation">Transition
+to <code>FossilSoloMCP</code>: Complete Rewrite &amp; Maturation</h3>
+<p>The strategic decision was made to rewrite the server entirely from
+scratch in <strong>Python</strong>, utilizing the high-performance
+<strong>FastMCP</strong> framework.</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature / Aspect</th>
+<th style="text-align: left;"><code>agent-vc-mcp</code> (Original)</th>
+<th style="text-align: left;"><code>FossilSoloMCP</code> (Current
+Project)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Language &amp;
+Runtime</strong></td>
+<td style="text-align: left;">TypeScript / Node.js
+(<code>npx</code>)</td>
+<td style="text-align: left;"><strong>Python 3.14+ (FastMCP)</strong>
+managed ultrarapidly via <code>uv</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Number of Tools
+Exposed</strong></td>
+<td style="text-align: left;">Exactly 10 tools</td>
+<td style="text-align: left;"><strong>29 complete, specialized
+tools</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Directory Management
+(CWD)</strong></td>
+<td style="text-align: left;">Static, fixed at startup via env vars</td>
+<td style="text-align: left;"><strong>Dynamic per call
+(<code>cwd</code>)</strong> across all 29 tools</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Repository
+Organization</strong></td>
+<td style="text-align: left;">Single shared repo in
+<code>~/.agent-vc/</code></td>
+<td style="text-align: left;"><strong>Independent repositories</strong>,
+cleanly stored in <code>.fossil_repositories/</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>File Operations</strong></td>
+<td style="text-align: left;">Forced rigid wrappers
+(<code>write_file</code>, etc.)</td>
+<td style="text-align: left;"><strong>Completely decoupled:</strong>
+relies on agent's native file tools</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Advanced History
+Inspection</strong></td>
+<td style="text-align: left;">None (only global
+<code>vc_diff</code>)</td>
+<td style="text-align: left;"><strong><code>fossil_timeline</code> (with
+filters), <code>fossil_finfo</code>, historical
+<code>fossil_cat</code></strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Branches &amp; Tags</strong></td>
+<td style="text-align: left;">Non-existent</td>
+<td style="text-align: left;"><strong>Full support
+(<code>fossil_branch</code>, <code>fossil_tag</code>)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Stashing &amp;
+Revert</strong></td>
+<td style="text-align: left;">Non-existent</td>
+<td style="text-align: left;"><strong>Full management
+(<code>fossil_stash</code>, <code>fossil_revert</code>,
+<code>fossil_undo</code>)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Wiki System (AI
+Memory)</strong></td>
+<td style="text-align: left;">Non-existent</td>
+<td style="text-align: left;"><strong>Fully integrated
+(<code>fossil_wiki_ls</code>, <code>wiki_read</code>,
+<code>wiki_write</code>)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ticketing System</strong></td>
+<td style="text-align: left;">Simplistic proprietary module</td>
+<td style="text-align: left;"><strong>Natively integrated Fossil
+ticketing with smart SQL fallback</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Windows Resilience &amp;
+Anti-Hang</strong></td>
+<td style="text-align: left;">Frequent console hangs/freezes</td>
+<td style="text-align: left;"><strong><code>stdin=DEVNULL</code>,
+auto-response <code>a</code> on prompts, 30s timeout</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CRLF / LF Line
+Endings</strong></td>
+<td style="text-align: left;">Errors on setting command</td>
+<td style="text-align: left;"><strong>Direct SQLite SQL injection +
+auto-generated <code>.editorconfig</code></strong></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="3-prerequisites-and-installation">3. Prerequisites and
+Installation</h2>
+<h3 id="1-system-prerequisites">1. System Prerequisites</h3>
+<ol type="1">
+<li><strong>Fossil SCM CLI Utility:</strong>
+<ul>
+<li>Download the official precompiled binary for your operating system
+(Windows, Linux, or macOS) from <a
+href="https://fossil-scm.org/"><span>https://fossil-scm.org/</span></a>.</li>
+<li>Place the executable in a directory on your machine (e.g.,
+<code>C:\Program Files\Fossil\</code> on Windows or
+<code>/usr/local/bin/</code> on Linux/macOS).</li>
+<li>Ensure the directory is added to your system's <code>PATH</code>
+environment variable.</li>
+<li>Verify availability in your terminal:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fossil</span> version</span></code></pre></div></li>
+</ul></li>
+<li><strong>Python &amp; <code>uv</code>:</strong>
+<ul>
+<li><strong>Python 3.14 or newer</strong> is recommended.</li>
+<li>The modern Python package and project manager <code>uv</code>
+installed on your system (or standard Python).</li>
+</ul></li>
+</ol>
+<hr />
+<h3 id="2-configuration-in-mcp-clients">2. Configuration in MCP
+Clients</h3>
+<p>Configuration is performed by adding the server definition to your
+MCP client's configuration file (<code>mcp_config.json</code>,
+<code>claude_desktop_config.json</code>, etc.).</p>
+<h4 id="universal-configuration-for-windows">Universal Configuration for
+Windows:</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fossil-scm&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uv&quot;</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;run&quot;</span><span class="ot">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;--directory&quot;</span><span class="ot">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;C:/Path/To/FossilSoloMCP&quot;</span><span class="ot">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;fossil-scm-mcp&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h4 id="universal-configuration-for-linux--macos">Universal
+Configuration for Linux / macOS:</h4>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fossil-scm&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uv&quot;</span><span class="fu">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;run&quot;</span><span class="ot">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;--directory&quot;</span><span class="ot">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;/home/user/projects/FossilSoloMCP&quot;</span><span class="ot">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;fossil-scm-mcp&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="tip">
+<div class="title">
+<p>Tip</p>
+</div>
+<p><strong>Path Replacement:</strong> Replace
+<code>"C:/Path/To/FossilSoloMCP"</code> or
+<code>"/home/user/projects/FossilSoloMCP"</code> with the actual
+absolute path where this repository is located on your machine.</p>
+<p><strong>Regarding the <code>--repository</code> Argument:</strong>
+The server operates fully dynamically based on the <code>cwd</code>
+parameter passed to each tool call. Therefore, specifying a static
+fallback repository at startup is optional.</p>
+</div>
+<hr />
+<h2 id="4-repository-architecture-and-organization">4. Repository
+Architecture and Organization</h2>
+<h3 id="the-fossil_repositories-convention">The
+<code>.fossil_repositories</code> Convention</h3>
+<p>To keep project root directories tidy and prevent large database
+files from cluttering the working tree, the server automatically
+enforces a clean convention:</p>
+<ol type="1">
+<li><strong>Repository Database (<code>.fossil</code>):</strong>
+<ul>
+<li>Saved in a hidden directory <code>.fossil_repositories/</code>
+automatically created in the parent folder of the workspace (e.g.,
+<code>../.fossil_repositories/ProjectName.fossil</code>).</li>
+</ul></li>
+<li><strong>Working Directory (Checkout):</strong>
+<ul>
+<li>Contains source code, documentation, and Fossil's hidden checkout
+tracking file named <code>_FOSSIL_</code> (on Windows) or
+<code>.fslckout</code> (on Linux/macOS).</li>
+<li>This file links the working directory to its associated SQLite
+repository database.</li>
+</ul></li>
+</ol>
+<h3 id="opening-the-graphical-web-interface">Opening the Graphical Web
+Interface</h3>
+<p>Fossil natively bundles an HTTP server and a rich web interface. To
+visually explore the repository in your browser, simply execute in your
+terminal inside the project directory:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fossil</span> ui</span></code></pre></div>
+<p><em>(Optionally, on Windows, you can launch the convenience script
+<code>open-ui-fossil.bat</code> included in the root
+directory).</em></p>
+<p>The command automatically opens your default browser at
+<code>http://localhost:8080</code>, providing instant visual access
+to:</p>
+<ul>
+<li><strong>Timeline:</strong> Interactive graphical DAG tree of all
+branches, tags, and commits.</li>
+<li><strong>Files:</strong> Historical file browser at any revision,
+with visual diffs and annotation (blame).</li>
+<li><strong>Tickets:</strong> Viewing, searching, and editing bug
+reports and tasks.</li>
+<li><strong>Wiki:</strong> Rich navigation and authoring of project
+articles and documentation.</li>
+</ul>
+<hr />
+<h2 id="5-ai-agent-workflow-guide-recommended-universal-flows">5. AI
+Agent Workflow Guide (Recommended Universal Flows)</h2>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>Golden Rule for Agents:</strong> When calling any tool in the
+<code>fossil-scm</code> server, <strong>always</strong> provide the
+<code>cwd</code> parameter explicitly set to the absolute path of the
+directory you are operating on (e.g.,
+<code>cwd="C:/Projects/MyApp"</code>).</p>
+</div>
+<hr />
+<h3
+id="recommended-ai-agent-rule-system-prompt--custom-instructions">Recommended
+AI Agent Rule (System Prompt / Custom Instructions)</h3>
+<p>To enable your AI assistant to automatically and correctly utilize
+the Fossil MCP server across any client (Claude Desktop, Cursor,
+Antigravity, etc.), add the following instruction to your system
+prompt:</p>
+<pre class="text"><code>For version control, issue ticketing, and persistent documentation, use the fossil-scm MCP tools.
+On every call, always pass the &#39;cwd&#39; parameter set to the current project&#39;s absolute working directory.
+Before making changes, verify status with fossil_status. Upon completing any task,
+stage files with fossil_add and commit the changes with fossil_commit using a clear message.</code></pre>
+<hr />
+<h3 id="flow-1-initializing-a-new-project">Flow 1: Initializing a New
+Project</h3>
+<p>When a user requests creating a new project with Fossil version
+control:</p>
+<ol type="1">
+<li>The agent calls <code>fossil_init</code>:
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;project_name&quot;</span><span class="fu">:</span> <span class="st">&quot;MyApp&quot;</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;C:/Projects/MyApp&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<em>What the server does automatically:</em>
+<ul>
+<li>Creates the <code>.fossil_repositories/</code> directory in the
+parent folder if not present.</li>
+<li>Initializes <code>MyApp.fossil</code>.</li>
+<li>Opens the repository in the working directory
+(<code>fossil open</code>).</li>
+<li>Applies anti-CRLF settings directly into SQLite SQL
+(<code>crlf-glob = *</code>).</li>
+<li>Automatically generates <code>.editorconfig</code>
+(<code>end_of_line = lf</code>) and tracks it in version control.</li>
+</ul></li>
+</ol>
+<hr />
+<h3 id="flow-2-standard-edit-and-commit-cycle">Flow 2: Standard Edit and
+Commit Cycle</h3>
+<p>During development or debugging, the agent follows a standard
+cycle:</p>
+<ol type="1">
+<li><strong>Check file status:</strong>
+<code>fossil_status(cwd="...")</code></li>
+<li><strong>Inspect exact modifications (diff):</strong>
+<code>fossil_diff(cwd="...")</code></li>
+<li><strong>Stage new files:</strong>
+<ul>
+<li>Specific files:
+<code>fossil_add(files=["src/main.py"], cwd="...")</code></li>
+<li>Automatic sync (new files and deletions):
+<code>fossil_addremove(cwd="...")</code></li>
+</ul></li>
+<li><strong>Commit to the repository:</strong>
+<code>fossil_commit(message="Implement authentication module", cwd="...")</code>
+<em>(The server resolves any interactive prompts automatically without
+hanging).</em></li>
+</ol>
+<hr />
+<h3 id="flow-3-risk-free-historical-exploration--investigation">Flow 3:
+Risk-Free Historical Exploration &amp; Investigation</h3>
+<p>Unlike other VCS setups where an agent risks overwriting the active
+workspace when inspecting past code:</p>
+<ul>
+<li><strong><code>fossil_timeline</code>:</strong> Displays the
+chronological event history. Supports filtering by specific file
+(<code>path="src/main.py"</code>).</li>
+<li><strong><code>fossil_finfo</code>:</strong> Displays the complete
+historical evolution of a single specified file.</li>
+<li><strong><code>fossil_cat</code> (The Secret Weapon):</strong> Reads
+the exact content of any file directly from a historical revision,
+branch, or tag <strong>without touching or modifying local files in the
+active working directory</strong>:
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;file&quot;</span><span class="fu">:</span> <span class="st">&quot;src/main.py&quot;</span><span class="fu">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;revision&quot;</span><span class="fu">:</span> <span class="st">&quot;f731ad3851&quot;</span><span class="fu">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="flow-4-task--bug-tracking-ticketing">Flow 4: Task &amp; Bug
+Tracking (Ticketing)</h3>
+<p>Fossil provides a full ticketing system stored directly in the
+repository database:</p>
+<ol type="1">
+<li><strong>List existing tickets:</strong>
+<code>fossil_ticket_list(cwd="...")</code></li>
+<li><strong>Create a new task / bug report:</strong>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Fix async timeout issue during remote calls&quot;</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;open&quot;</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;additional_fields&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;Code_Defect&quot;</span><span class="fu">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;severity&quot;</span><span class="fu">:</span> <span class="st">&quot;High&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<li><strong>Close or update an existing ticket:</strong>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;ticket_id&quot;</span><span class="fu">:</span> <span class="st">&quot;a1b2c3d4&quot;</span><span class="fu">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;field_name&quot;</span><span class="fu">:</span> <span class="st">&quot;status&quot;</span><span class="fu">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;field_value&quot;</span><span class="fu">:</span> <span class="st">&quot;closed&quot;</span><span class="fu">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cwd&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ol>
+<hr />
+<h3 id="flow-5-documentation-as-persistent-ai-memory-wiki">Flow 5:
+Documentation as Persistent AI Memory (Wiki)</h3>
+<p>Fossil Wiki pages are stored directly in the repository and do not
+depend on loose disk files:</p>
+<ol type="1">
+<li><strong>List existing wiki pages:</strong>
+<code>fossil_wiki_ls(cwd="...")</code></li>
+<li><strong>Read documentation:</strong>
+<code>fossil_wiki_read(page_name="SystemArchitecture", cwd="...")</code></li>
+<li><strong>Store architectural decisions for future sessions:</strong>
+<code>fossil_wiki_write(page_name="DesignDecisions", content="# Architecture...", cwd="...")</code></li>
+</ol>
+<hr />
+<h2 id="6-complete-reference-of-the-29-mcp-tools">6. Complete Reference
+of the 29 MCP Tools</h2>
+<h3 id="a-version-control-20-tools">A. Version Control (20 Tools)</h3>
+<h4 id="1-fossil_status">1. <code>fossil_status</code></h4>
+<ul>
+<li><strong>Description:</strong> Displays current workspace file status
+(modified, added, missing, untracked files).</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Whether to
+include hidden files/folders (starting with dot).</li>
+<li><code>brief</code> <em>(boolean, default: false)</em>: Brief output
+showing only status keywords.</li>
+<li><code>ignore</code> <em>(string, optional)</em>: Comma-separated
+glob patterns of files to ignore.</li>
+</ul></li>
+</ul>
+<h4 id="2-fossil_diff">2. <code>fossil_diff</code></h4>
+<ul>
+<li><strong>Description:</strong> Shows code diffs between workspace
+changes and repository, or between historical revisions.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+<li><code>files</code> <em>(array of strings, optional)</em>: Specific
+list of files to compare.</li>
+<li><code>from_version</code> <em>(string, optional)</em>: Starting
+revision (<code>--from</code>).</li>
+<li><code>to_version</code> <em>(string, optional)</em>: Destination
+revision (<code>--to</code>).</li>
+<li><code>branch</code> <em>(string, optional)</em>: Compares changes on
+specified branch.</li>
+<li><code>brief</code> <em>(boolean, default: false)</em>: Lists only
+modified filenames without full diff.</li>
+<li><code>ignore_whitespace</code> <em>(boolean, default: false)</em>:
+Ignores whitespace changes (<code>-w</code>).</li>
+</ul></li>
+</ul>
+<h4 id="3-fossil_cat">3. <code>fossil_cat</code></h4>
+<ul>
+<li><strong>Description:</strong> Extracts and returns textual content
+of a file from a specified historical revision without altering the
+local workspace.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>file</code> <em>(string, required)</em>: Relative file
+path.</li>
+<li><code>revision</code> <em>(string, required)</em>: Commit hash, tag,
+or branch name.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="4-fossil_finfo">4. <code>fossil_finfo</code></h4>
+<ul>
+<li><strong>Description:</strong> Returns detailed modification history
+for a single specified file. Transparently follows rename events
+performed with <code>fossil_mv</code>.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>file</code> <em>(string, required)</em>: File path.</li>
+<li><code>limit</code> <em>(integer, optional)</em>: Maximum number of
+revisions to display (<code>-n</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="5-fossil_add">5. <code>fossil_add</code></h4>
+<ul>
+<li><strong>Description:</strong> Schedules addition of one or more
+files/directories into version control.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>files</code> <em>(array of strings, required)</em>: List of
+file or directory paths.</li>
+<li><code>force</code> <em>(boolean, default: true)</em>: Forces
+addition even if matching <code>ignore-glob</code> patterns.</li>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Includes
+hidden files in recursive scan.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="6-fossil_rm">6. <code>fossil_rm</code></h4>
+<ul>
+<li><strong>Description:</strong> Removes files from version
+control.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>files</code> <em>(array of strings, required)</em>: List of
+files to remove.</li>
+<li><code>force</code> <em>(boolean, default: false)</em>: Forces
+deletion without warnings.</li>
+<li><code>keep</code> <em>(boolean, default: false)</em>: Retains files
+physically on disk, removing them only from VCS.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="7-fossil_mv">7. <code>fossil_mv</code></h4>
+<ul>
+<li><strong>Description:</strong> Renames or moves a file or directory
+in both repository and disk. Explicitly records the <code>RENAME</code>
+event in the version DAG, ensuring unbroken history tracking via
+<code>fossil_finfo</code>.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>old_name</code> <em>(string, required)</em>: Source file or
+directory path.</li>
+<li><code>new_name</code> <em>(string, required)</em>: Destination file
+or directory path.</li>
+<li><code>hard</code> <em>(boolean, default: true)</em>: Physically
+moves/renames the file on disk (<code>--hard</code>). If False, only
+records rename intention in manifest (<code>--soft</code>).</li>
+<li><code>case_sensitive</code> <em>(boolean, optional)</em>: Enforces
+case sensitivity (<code>--case-sensitive 1/0</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="8-fossil_addremove">8. <code>fossil_addremove</code></h4>
+<ul>
+<li><strong>Description:</strong> Scans workspace and automatically adds
+newly created files while removing files deleted from disk.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Includes
+dotfiles.</li>
+<li><code>ignore</code> <em>(string, optional)</em>: Glob patterns to
+ignore.</li>
+<li><code>clean</code> <em>(boolean, default: false)</em>: Deletes
+untracked extra files.</li>
+<li><code>reset</code> <em>(boolean, default: false)</em>: Resets
+add/remove state.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="9-fossil_extras">9. <code>fossil_extras</code></h4>
+<ul>
+<li><strong>Description:</strong> Lists all files in the current working
+directory that are not tracked under version control.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>dotfiles</code> <em>(boolean, default: false)</em>: Includes
+hidden files.</li>
+<li><code>ignore</code> <em>(string, optional)</em>: Additional glob
+filter.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="10-fossil_clean">10. <code>fossil_clean</code></h4>
+<ul>
+<li><strong>Description:</strong> Cleans untracked and temporary files
+from the working tree (<code>fossil clean</code>).</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>all_files</code> <em>(boolean, default: false)</em>: Forces
+removal without interactive prompts (<code>-f</code>).</li>
+<li><code>dry_run</code> <em>(boolean, default: false)</em>: Simulation
+mode; lists files that would be removed without deleting
+(<code>-n</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="11-fossil_revert">11. <code>fossil_revert</code></h4>
+<ul>
+<li><strong>Description:</strong> Reverts uncommitted modifications in
+specified files back to their repository state.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>files</code> <em>(array of strings, required)</em>: Files to
+revert.</li>
+<li><code>revision</code> <em>(string, optional)</em>: Revision to
+revert to (defaults to current checkout).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="12-fossil_stash">12. <code>fossil_stash</code></h4>
+<ul>
+<li><strong>Description:</strong> Temporarily saves uncommitted local
+changes to clear the workspace, allowing subsequent reapplication.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>action</code> <em>(string, default: "save")</em>: Stash
+action: <code>"save"</code>, <code>"snapshot"</code>,
+<code>"list"</code>, <code>"pop"</code>, <code>"apply"</code>,
+<code>"drop"</code>, <code>"diff"</code>.</li>
+<li><code>comment</code> <em>(string, optional)</em>: Comment describing
+the stash.</li>
+<li><code>stash_id</code> <em>(integer, optional)</em>: Identification
+number of the stash.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="13-fossil_tag">13. <code>fossil_tag</code></h4>
+<ul>
+<li><strong>Description:</strong> Manages symbolic tags attached to
+specific check-ins.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>action</code> <em>(string, default: "list")</em>:
+<code>"add"</code>, <code>"cancel"</code>, <code>"list"</code>.</li>
+<li><code>tag_name</code> <em>(string, optional)</em>: Tag name (e.g.,
+<code>"v1.0.0"</code>).</li>
+<li><code>checkin</code> <em>(string, optional)</em>: Revision check-in
+to tag.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="14-fossil_commit">14. <code>fossil_commit</code></h4>
+<ul>
+<li><strong>Description:</strong> Permanently commits staged changes as
+a new check-in in the repository.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>message</code> <em>(string, required)</em>: Commit
+message.</li>
+<li><code>files</code> <em>(array of strings, optional)</em>: Specific
+files to commit.</li>
+<li><code>branch</code> <em>(string, optional)</em>: New branch name to
+place the commit on (<code>--branch</code>).</li>
+<li><code>no_warnings</code> <em>(boolean, default: true)</em>:
+Suppresses CRLF and binary warnings.</li>
+<li><code>allow_empty</code> <em>(boolean, default: false)</em>: Allows
+commit even if there are no changes.</li>
+<li><code>user_override</code> <em>(string, optional)</em>: Overrides
+author username.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="15-fossil_timeline">15. <code>fossil_timeline</code></h4>
+<ul>
+<li><strong>Description:</strong> Displays chronological history of
+check-ins, wiki edits, and project activity.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>limit</code> <em>(integer, default: 20)</em>: Maximum number
+of events to show.</li>
+<li><code>path</code> <em>(string, optional)</em>: Filters timeline to a
+specific file or folder (<code>-p</code>).</li>
+<li><code>type_filter</code> <em>(string, optional)</em>: Type filter:
+<code>"ci"</code> (checkins), <code>"w"</code> (wiki), <code>"t"</code>
+(tickets), <code>"e"</code> (events) (<code>-t</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="16-fossil_info">16. <code>fossil_info</code></h4>
+<ul>
+<li><strong>Description:</strong> Shows detailed information about the
+repository, current checkout, or a specific revision.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>target</code> <em>(string, optional)</em>: Revision hash, tag,
+or filename to inspect.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="17-fossil_branch">17. <code>fossil_branch</code></h4>
+<ul>
+<li><strong>Description:</strong> Manages parallel development
+branches.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>action</code> <em>(string, default: "list")</em>:
+<code>"list"</code> or <code>"new"</code>.</li>
+<li><code>branch_name</code> <em>(string, optional)</em>: Name of the
+new branch when <code>action="new"</code>.</li>
+<li><code>basis</code> <em>(string, optional)</em>: Basis check-in
+point.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="18-fossil_merge">18. <code>fossil_merge</code></h4>
+<ul>
+<li><strong>Description:</strong> Merges another branch or specific
+check-in into the current workspace (<code>fossil merge</code>).</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>branch_or_version</code> <em>(string, required)</em>: Branch
+name or check-in hash to merge.</li>
+<li><code>integrate</code> <em>(boolean, default: false)</em>: If True
+(<code>--integrate</code>), automatically closes the source branch upon
+subsequent commit.</li>
+<li><code>dry_run</code> <em>(boolean, default: false)</em>: Simulates
+merge without altering local files (<code>-n</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="19-fossil_update">19. <code>fossil_update</code></h4>
+<ul>
+<li><strong>Description:</strong> Updates workspace files to the latest
+revision or switches checkout to another branch/version.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>target</code> <em>(string, optional)</em>: Version, branch, or
+tag to switch to.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="20-fossil_undo">20. <code>fossil_undo</code></h4>
+<ul>
+<li><strong>Description:</strong> Reverses the last <code>update</code>,
+<code>revert</code>, or <code>merge</code> operation executed in the
+workspace.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>dry_run</code> <em>(boolean, default: false)</em>: Shows what
+would be reversed without performing action.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="b-repository-administration--setup-3-tools">B. Repository
+Administration &amp; Setup (3 Tools)</h3>
+<h4 id="21-fossil_init">21. <code>fossil_init</code></h4>
+<ul>
+<li><strong>Description:</strong> Creates and initializes a new Fossil
+repository database and automatically opens it in the specified
+directory.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>db_name</code> <em>(string, optional)</em>: Repository
+database filename (defaults to current folder name).</li>
+<li><code>project_name</code> <em>(string, optional)</em>: Logical
+project name.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="22-fossil_open">22. <code>fossil_open</code></h4>
+<ul>
+<li><strong>Description:</strong> Opens an existing Fossil repository
+database in the specified directory.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>db_name</code> <em>(string, required)</em>: Repository
+<code>.fossil</code> filename or path.</li>
+<li><code>force</code> <em>(boolean, default: false)</em>: Forces open
+even if directory is non-empty (<code>-f</code>).</li>
+<li><code>keep</code> <em>(boolean, default: false)</em>: Preserves
+existing local files (<code>-k</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="23-fossil_settings">23. <code>fossil_settings</code></h4>
+<ul>
+<li><strong>Description:</strong> Inspects or modifies repository
+configuration properties (<code>crlf-glob</code>,
+<code>binary-glob</code>, <code>ignore-glob</code>,
+<code>autosync</code>, etc.).</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>name</code> <em>(string, optional)</em>: Property name (if
+omitted, lists all settings).</li>
+<li><code>value</code> <em>(string, optional)</em>: New value to
+set.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="c-ticketing-system-3-tools">C. Ticketing System (3 Tools)</h3>
+<h4 id="24-fossil_ticket_list">24. <code>fossil_ticket_list</code></h4>
+<ul>
+<li><strong>Description:</strong> Lists existing tickets in the
+repository (includes automatic fallback to direct SQLite querying if
+standard Fossil ticket reports are not configured).</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>report</code> <em>(integer, default: 1)</em>: Standard Fossil
+report number.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="25-fossil_ticket_create">25.
+<code>fossil_ticket_create</code></h4>
+<ul>
+<li><strong>Description:</strong> Opens a new ticket in the repository's
+tracking database.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>title</code> <em>(string, required)</em>: Title or summary of
+the task/defect.</li>
+<li><code>status</code> <em>(string, default: "open")</em>: Initial
+status (<code>"open"</code>, <code>"in_progress"</code>,
+<code>"closed"</code>, etc.).</li>
+<li><code>additional_fields</code> <em>(JSON dictionary/object,
+optional)</em>: Additional fields (e.g., <code>type</code>,
+<code>severity</code>, <code>subsystem</code>,
+<code>description</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="26-fossil_ticket_update">26.
+<code>fossil_ticket_update</code></h4>
+<ul>
+<li><strong>Description:</strong> Modifies a field or status of an
+existing ticket.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>ticket_id</code> <em>(string, required)</em>: Ticket UUID
+identifier (or prefix).</li>
+<li><code>field_name</code> <em>(string, required)</em>: Field name to
+update (e.g., <code>"status"</code>, <code>"comment"</code>).</li>
+<li><code>field_value</code> <em>(string, required)</em>: New value
+assigned to field.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="d-wiki-system-3-tools">D. Wiki System (3 Tools)</h3>
+<h4 id="27-fossil_wiki_ls">27. <code>fossil_wiki_ls</code></h4>
+<ul>
+<li><strong>Description:</strong> Returns a list of all wiki pages
+present in the repository.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="28-fossil_wiki_read">28. <code>fossil_wiki_read</code></h4>
+<ul>
+<li><strong>Description:</strong> Reads and returns complete
+text/markdown content of requested wiki page.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>page_name</code> <em>(string, required)</em>: Wiki page
+name.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="29-fossil_wiki_write">29. <code>fossil_wiki_write</code></h4>
+<ul>
+<li><strong>Description:</strong> Creates a new wiki page or updates
+content of an existing wiki page in the repository.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>page_name</code> <em>(string, required)</em>: Wiki page
+name.</li>
+<li><code>content</code> <em>(string, required)</em>: Markdown or text
+content.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="7-windows-specifics--built-in-technical-solutions">7. Windows
+Specifics &amp; Built-in Technical Solutions</h2>
+<p>Running tools ported from UNIX on Windows presents specific
+challenges. <code>FossilSoloMCP</code> incorporates dedicated resilience
+measures:</p>
+<h3 id="1-wildcard-expansion-issue-with-crlf-glob-">1. Wildcard
+Expansion Issue with <code>crlf-glob "*"</code></h3>
+<ul>
+<li><strong>The Problem:</strong> On Windows, the MSVC/MinGW runtime of
+<code>fossil.exe</code> automatically expands <code>*</code> wildcards
+before entering <code>main()</code>. A command like
+<code>fossil settings crlf-glob "*"</code> reached Fossil as a raw list
+of all filenames in the directory, causing syntax errors.</li>
+<li><strong>The Solution:</strong> The server applies this setting
+directly to the repository database via native SQLite SQL:
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">REPLACE</span> <span class="kw">INTO</span> config(name,<span class="fu">value</span>) <span class="kw">VALUES</span>(<span class="st">&#39;crlf-glob&#39;</span>,<span class="st">&#39;*&#39;</span>)</span></code></pre></div>
+Bypassing the CLI entirely, this operation is 100% reliable, portable,
+and atomic.</li>
+</ul>
+<h3 id="2-preserving-the-lf-standard-via-editorconfig">2. Preserving the
+LF Standard via <code>.editorconfig</code></h3>
+<ul>
+<li>Even though <code>crlf-glob = *</code> eliminates commit errors,
+Windows CRLF line endings can introduce artificial diffs across
+commits.</li>
+<li>Upon <code>fossil_open</code>, the server automatically creates an
+<code>.editorconfig</code> file enforcing <code>end_of_line = lf</code>,
+ensuring code editors save clean UNIX-style line endings.</li>
+</ul>
+<h3 id="3-anti-hang-protection--safety-timeout">3. Anti-Hang Protection
+&amp; Safety Timeout</h3>
+<ul>
+<li>Every spawned CLI process has <code>stdin</code> redirected to
+<code>subprocess.DEVNULL</code> when no explicit input is provided,
+preventing hangs on interactive prompts.</li>
+<li>During <code>fossil_commit</code>, the server automatically supplies
+<code>a\n</code> on standard input to validate binary file and warning
+prompts.</li>
+<li>All process calls are guarded by a strict 30-second timeout, with
+full capture of <code>stderr</code> and exit codes for immediate
+diagnosis.</li>
+</ul>
+<hr />
+<h2 id="8-best-practices--operational-tips">8. Best Practices &amp;
+Operational Tips</h2>
+<ol type="1">
+<li><strong>Atomic &amp; Explicit Commits:</strong>
+<ul>
+<li>Make frequent, focused commits after each working milestone or bug
+fix. Using <code>fossil_undo</code> or <code>fossil_revert</code>, you
+can always roll back cleanly to a verified stable state.</li>
+</ul></li>
+<li><strong>Preserving Project History in Wiki:</strong>
+<ul>
+<li>Use Wiki pages (<code>fossil_wiki_write</code>) to document
+architectural conclusions, schema designs, or deployment instructions.
+Stored safely inside <code>.fossil</code>, they are never lost and
+remain directly viewable in your browser via
+<code>fossil ui</code>.</li>
+</ul></li>
+<li><strong>Advanced Optimization: Working on RAM Disk
+(Optional):</strong>
+<ul>
+<li>For developers running endurance benchmarks, generating massive
+temporary scratch files, or running intensive AI automation scripts,
+using a temporary RAM Disk is an outstanding way to protect SSD write
+cycles and achieve maximum I/O throughput. Upon completing work
+sessions, validated changes can be synchronized to the permanent
+repository.</li>
+</ul></li>
+<li><strong>Advanced Automations with AI Agents:</strong>
+<ul>
+<li>Depending on your client or IDE (e.g., agent rules in Google
+Antigravity, <code>.cursorrules</code> in Cursor, or System Prompts in
+Claude Desktop), configure clear instructions so the agent automatically
+versions important steps without requiring repetitive manual
+intervention.</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="9-license--disclaimer-no-warranty">9. License &amp; Disclaimer
+(No Warranty)</h2>
+<h3 id="page_facing_up-license">📄 License</h3>
+<p>This project is licensed under the terms of the <strong>MIT</strong>
+License. See the <a href="LICENSE">LICENSE</a> file for complete
+details.</p>
+<hr />
+<h3 id="memo-warranty">📝 Warranty</h3>
+<p>No warranty of any kind is provided!</p>
+
+  </article>
+</main>
+
+<a href="#cuprins" class="back-to-top-btn" id="back-to-top" title="Navighează la Cuprins">↑ Cuprins</a>
+
+<script>
+(function() {
+  const btnRo = document.getElementById('btn-lang-ro');
+  const btnEn = document.getElementById('btn-lang-en');
+  const secRo = document.getElementById('lang-section-ro');
+  const secEn = document.getElementById('lang-section-en');
+  const docTitle = document.getElementById('doc-title');
+  const docDesc = document.getElementById('doc-desc');
+  const backToTop = document.getElementById('back-to-top');
+
+  function setLanguage(lang) {
+    if (lang === 'en') {
+      secRo.classList.remove('active');
+      secEn.classList.add('active');
+      btnRo.classList.remove('active');
+      btnEn.classList.add('active');
+      document.documentElement.setAttribute('lang', 'en');
+      docTitle.textContent = "FossilSoloMCP - User Manual & Technical Reference";
+      docDesc.content = "Complete user manual and technical reference for FossilSoloMCP (Fossil SCM MCP Server).";
+      if (backToTop) {
+        backToTop.href = "#table-of-contents";
+        backToTop.textContent = "↑ Contents";
+        backToTop.title = "Navigate to Table of Contents";
+      }
+    } else {
+      secEn.classList.remove('active');
+      secRo.classList.add('active');
+      btnEn.classList.remove('active');
+      btnRo.classList.add('active');
+      document.documentElement.setAttribute('lang', 'ro');
+      docTitle.textContent = "FossilSoloMCP - Manual de Utilizare și Referință Tehnică";
+      docDesc.content = "Manual complet de utilizare și referință tehnică pentru serverul MCP FossilSoloMCP (Fossil SCM).";
+      if (backToTop) {
+        backToTop.href = "#cuprins";
+        backToTop.textContent = "↑ Cuprins";
+        backToTop.title = "Navighează la Cuprins";
+      }
+    }
+    localStorage.setItem('fossilsolo_manual_lang', lang);
+  }
+
+  btnRo.addEventListener('click', () => setLanguage('ro'));
+  btnEn.addEventListener('click', () => setLanguage('en'));
+
+  const savedLang = localStorage.getItem('fossilsolo_manual_lang');
+  if (savedLang) {
+    setLanguage(savedLang);
+  } else {
+    const userLang = navigator.language || navigator.userLanguage || '';
+    if (userLang.toLowerCase().startsWith('ro')) {
+      setLanguage('ro');
+    } else {
+      setLanguage('en');
+    }
+  }
+
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  const themeIcon = document.getElementById('theme-icon');
+
+  function updateThemeIcon(theme) {
+    if (themeIcon) {
+      themeIcon.textContent = (theme === 'light') ? '🌙' : '☀️';
+    }
+  }
+
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeIcon(currentTheme);
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = (current === 'dark') ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('fossilsolo_theme', next);
+      updateThemeIcon(next);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

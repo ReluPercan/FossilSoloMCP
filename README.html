@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FossilSoloMCP - Headless Fossil SCM MCP Server</title>
+  <meta name="description" content="Model Context Protocol (MCP) server for Fossil SCM repositories.">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('fossilsolo_theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+
+  :root, [data-theme="dark"] {
+    --bg-page: #0f141c;
+    --bg-surface: #161d28;
+    --bg-card: #1c2534;
+    --bg-subtle: #242f42;
+    --bg-hover: #2d3a52;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --border-light: #283548;
+    --border-strong: #3b4d68;
+    --primary: #38bdf8;
+    --primary-hover: #7dd3fc;
+    --primary-dim: rgba(56, 189, 248, 0.12);
+    --code-bg: #121822;
+    --code-border: #222d3e;
+    --table-stripe: #141b25;
+    --table-header: #1a2332;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.55);
+
+    --alert-note-border: #3b82f6;
+    --alert-note-bg: rgba(59, 130, 246, 0.1);
+    --alert-note-title: #60a5fa;
+
+    --alert-tip-border: #10b981;
+    --alert-tip-bg: rgba(16, 185, 129, 0.1);
+    --alert-tip-title: #34d399;
+
+    --alert-important-border: #a855f7;
+    --alert-important-bg: rgba(168, 85, 247, 0.1);
+    --alert-important-title: #c084fc;
+
+    --alert-warning-border: #f59e0b;
+    --alert-warning-bg: rgba(245, 158, 11, 0.1);
+    --alert-warning-title: #fbbf24;
+
+    --alert-caution-border: #ef4444;
+    --alert-caution-bg: rgba(239, 68, 68, 0.1);
+    --alert-caution-title: #f87171;
+  }
+
+  [data-theme="light"] {
+    --bg-page: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-card: #f1f5f9;
+    --bg-subtle: #e2e8f0;
+    --bg-hover: #cbd5e1;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+    --border-light: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --primary: #0284c7;
+    --primary-hover: #0369a1;
+    --primary-dim: rgba(2, 132, 199, 0.08);
+    --code-bg: #f8fafc;
+    --code-border: #e2e8f0;
+    --table-stripe: #f8fafc;
+    --table-header: #edf2f7;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    --alert-note-border: #2563eb;
+    --alert-note-bg: #eff6ff;
+    --alert-note-title: #1d4ed8;
+
+    --alert-tip-border: #059669;
+    --alert-tip-bg: #ecfdf5;
+    --alert-tip-title: #047857;
+
+    --alert-important-border: #9333ea;
+    --alert-important-bg: #faf5ff;
+    --alert-important-title: #7e22ce;
+
+    --alert-warning-border: #d97706;
+    --alert-warning-bg: #fffbeb;
+    --alert-warning-title: #b45309;
+
+    --alert-caution-border: #dc2626;
+    --alert-caution-bg: #fef2f2;
+    --alert-caution-title: #b91c1c;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.68;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .top-control-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    background: rgba(15, 20, 28, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 10000;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  [data-theme="light"] .top-control-bar {
+    background: rgba(248, 250, 252, 0.9);
+  }
+
+  .bar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.05em;
+    color: var(--text-main);
+    text-decoration: none;
+    user-select: none;
+  }
+  .bar-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #0284c7, #0ea5e9);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 13px;
+    border-radius: 5px;
+    font-family: Consolas, monospace;
+    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+  }
+
+  .bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 2px;
+    box-shadow: var(--shadow-sm);
+  }
+  .lang-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.84em;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .lang-btn:hover { color: var(--text-main); }
+  .lang-btn.active {
+    background-color: var(--primary);
+    color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .theme-btn {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-strong);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15em;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  .theme-btn:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  .page-container {
+    max-width: 960px;
+    margin: 54px auto 0 auto;
+    padding: 40px 32px 80px 32px;
+    background-color: var(--bg-surface);
+    border-left: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    min-height: calc(100vh - 54px);
+    box-shadow: var(--shadow-md);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-main);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+  }
+  h1 { font-size: 2.2em; border-bottom: 2px solid var(--border-light); padding-bottom: 0.4em; }
+  h2 { font-size: 1.6em; border-bottom: 1px solid var(--border-light); padding-bottom: 0.3em; margin-top: 2em; }
+  h3 { font-size: 1.25em; }
+  h4 { font-size: 1.08em; }
+
+  a { color: var(--primary); text-decoration: none; transition: color 0.15s ease; }
+  a:hover { color: var(--primary-hover); text-decoration: underline; }
+
+  p, ul, ol { margin-top: 0.8em; margin-bottom: 0.8em; }
+  li { margin-top: 0.3em; margin-bottom: 0.3em; }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border-light);
+    margin: 2.5em 0;
+  }
+
+  code {
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    color: var(--primary);
+  }
+
+  pre, div.sourceCode {
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: 1.4em 0;
+    box-shadow: var(--shadow-sm);
+  }
+  pre code, div.sourceCode code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font-size: 1em;
+  }
+
+  .kw, .cf { color: #f472b6; font-weight: 600; }
+  .dt { color: #38bdf8; }
+  .st { color: #a3e635; }
+  .co { color: #94a3b8; font-style: italic; }
+  .fu { color: #60a5fa; }
+  .op { color: #f43f5e; }
+  .va { color: #e2e8f0; }
+  .cn { color: #fbbf24; }
+  .sc { color: #38bdf8; }
+  .bn { color: #c084fc; }
+
+  [data-theme="light"] .kw, [data-theme="light"] .cf { color: #be185d; }
+  [data-theme="light"] .dt { color: #0369a1; }
+  [data-theme="light"] .st { color: #15803d; }
+  [data-theme="light"] .co { color: #64748b; font-style: italic; }
+  [data-theme="light"] .fu { color: #1d4ed8; }
+  [data-theme="light"] .op { color: #b91c1c; }
+  [data-theme="light"] .va { color: #1e293b; }
+  [data-theme="light"] .cn { color: #b45309; }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94em;
+    text-align: left;
+  }
+  th, td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+  }
+  th:last-child, td:last-child { border-right: none; }
+  th {
+    background-color: var(--table-header);
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  tr:nth-child(even) td { background-color: var(--table-stripe); }
+  tr:hover td { background-color: var(--bg-hover); }
+
+  .note, .tip, .important, .warning, .caution, .markdown-alert {
+    padding: 14px 18px;
+    margin: 1.6em 0;
+    border-left: 4px solid var(--border-strong);
+    border-radius: 0 8px 8px 0;
+    background-color: var(--bg-card);
+  }
+  .note .title, .tip .title, .important .title, .warning .title, .caution .title, .markdown-alert-title {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 1.02em;
+  }
+  .note .title p, .tip .title p, .important .title p, .warning .title p, .caution .title p {
+    margin: 0;
+  }
+
+  .note { border-left-color: var(--alert-note-border); background-color: var(--alert-note-bg); }
+  .note .title { color: var(--alert-note-title); }
+  .note .title::before { content: "ℹ️"; margin-right: 4px; }
+
+  .tip { border-left-color: var(--alert-tip-border); background-color: var(--alert-tip-bg); }
+  .tip .title { color: var(--alert-tip-title); }
+  .tip .title::before { content: "💡"; margin-right: 4px; }
+
+  .important { border-left-color: var(--alert-important-border); background-color: var(--alert-important-bg); }
+  .important .title { color: var(--alert-important-title); }
+  .important .title::before { content: "📌"; margin-right: 4px; }
+
+  .warning { border-left-color: var(--alert-warning-border); background-color: var(--alert-warning-bg); }
+  .warning .title { color: var(--alert-warning-title); }
+  .warning .title::before { content: "⚠️"; margin-right: 4px; }
+
+  .caution { border-left-color: var(--alert-caution-border); background-color: var(--alert-caution-bg); }
+  .caution .title { color: var(--alert-caution-title); }
+  .caution .title::before { content: "🛑"; margin-right: 4px; }
+
+  .back-to-top-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background-color: var(--primary);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.9em;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.92;
+    transition: opacity 0.2s, transform 0.2s, background-color 0.2s;
+    z-index: 9999;
+    text-decoration: none !important;
+  }
+  .back-to-top-btn:hover {
+    opacity: 1;
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 650px) {
+    .top-control-bar { padding: 0 12px; }
+    .bar-brand span:not(.bar-brand-badge) { display: none; }
+    .page-container { padding-left: 14px; padding-right: 14px; }
+    .back-to-top-btn { bottom: 18px; right: 18px; padding: 8px 14px; font-size: 0.82em; }
+  }
+
+  @media print {
+    body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+    .top-control-bar, .back-to-top-btn { display: none !important; }
+    .page-container { max-width: 100%; padding-left: 0; padding-right: 0; margin-top: 0; }
+    pre, table { page-break-inside: avoid; box-shadow: none; }
+  }
+
+  </style>
+</head>
+<body>
+
+<header class="top-control-bar">
+  <a href="#" class="bar-brand">
+    <span class="bar-brand-badge">F</span>
+    <span>FossilSoloMCP</span>
+  </a>
+  <div class="bar-actions">
+    <button id="theme-toggle-btn" class="theme-btn" aria-label="Toggle theme" title="Toggle theme (Dark / Light)">
+      <span id="theme-icon">☀️</span>
+    </button>
+  </div>
+</header>
+
+<main class="page-container">
+  <article lang="en">
+<p><a href="README.html">🇬🇧 English</a> | <a
+href="doc/citeste-ma.html">🇷🇴 Versiunea în limba română</a></p>
+<hr />
+<p>⚠️ <strong>Note:</strong><br />
+✨ <strong>100% AI‑powered project 🪄</strong> — concept, analysis,
+code, testing, documentation — with the <strong>human</strong> 👨‍💻 in the
+loop as the <strong>big boss</strong> 👨‍💼 for <strong>control</strong>,
+<strong>fine‑tuning</strong>, and <strong>decisions</strong> 🤔😉🤫.</p>
+<hr />
+<h1 id="fossil-scm---mcp-server">Fossil SCM - MCP Server</h1>
+<p>A robust Model Context Protocol (MCP) server providing comprehensive,
+headless programmatic access to <strong>Fossil SCM</strong>
+repositories. It exposes <strong>29 dedicated tools</strong> covering
+Version Control, Repository Administration &amp; Settings, Bug/Task
+Ticketing, and Wiki management, tailored specifically for AI agents
+(Google Antigravity, Claude Desktop, Cursor, etc.).</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>CRITICAL:</strong> This package does NOT install the Fossil
+executable itself.<br />
+For this MCP server to function, you MUST have the <code>fossil</code>
+command-line utility installed and available in your system's
+<code>PATH</code> environment variable.</p>
+</div>
+<ol type="1">
+<li>Download Fossil from the official website: <a
+href="https://fossil-scm.org/"><span>https://fossil-scm.org/</span></a></li>
+<li>Extract and place the executable (<code>fossil.exe</code> on
+Windows, <code>fossil</code> on Linux/macOS) in a directory of your
+choice.</li>
+<li>Add that directory to your system's <code>PATH</code>.</li>
+</ol>
+<h2 id="installation--configuration">Installation &amp;
+Configuration</h2>
+<p>To integrate this MCP server with Claude Desktop, Google Antigravity,
+or other MCP-compatible clients, add the following configuration to your
+MCP configuration file (e.g., <code>claude_desktop_config.json</code> or
+<code>mcp_config.json</code>):</p>
+<h3 id="using-uv-recommended">Using <code>uv</code> (Recommended)</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fossil-scm&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uv&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;run&quot;</span><span class="ot">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;--directory&quot;</span><span class="ot">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;/path/to/fossil-scm-mcp&quot;</span><span class="ot">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;fossil-scm-mcp&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><em>Replace <code>/path/to/fossil-scm-mcp</code> with the actual path
+to the repository directory on your system (e.g.,
+<code>C:/Tools/FossilSCM</code> or
+<code>/home/user/FossilSCM</code>).</em></p>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>Golden Rule for AI Agents (Dynamic
+<code>cwd</code>):</strong><br />
+The server operates completely decoupled and dynamically. To cleanly
+handle multiple repositories without workspace conflicts, <strong>always
+instruct your AI assistant to provide the <code>cwd</code>
+parameter</strong> (the absolute path of the current project) on every
+tool call.</p>
+<p><em>Recommended AI Agent Rule (System Prompt / Custom
+Instructions):</em></p>
+<pre class="text"><code>When calling any tool in the fossil-scm MCP server, always provide the &#39;cwd&#39; parameter explicitly set to the current project&#39;s absolute working directory.</code></pre>
+</div>
+<div class="tip">
+<div class="title">
+<p>Tip</p>
+</div>
+<p>The <code>--repository</code> CLI parameter can optionally specify a
+static fallback working directory for calls omitting <code>cwd</code>.
+However, passing <code>cwd</code> dynamically on every tool call remains
+the recommended practice.</p>
+</div>
+<h2 id="key-features--capabilities">Key Features &amp; Capabilities</h2>
+<ul>
+<li><strong>29 Specialized Tools:</strong>
+<ul>
+<li><strong>Version Control (20 tools):</strong> Workspace status
+(<code>fossil_status</code>), diff with revision and branch support
+(<code>fossil_diff</code>), historical file inspection without checkout
+(<code>fossil_cat</code>), per-file commit history
+(<code>fossil_finfo</code>), granular file restoration
+(<code>fossil_revert</code>), DAG-preserving file rename
+(<code>fossil_mv</code>), workspace cleanup (<code>fossil_clean</code>),
+branch merging with auto-close (<code>fossil_merge</code>), temporary
+stash management (<code>fossil_stash</code>), symbolic tag management
+(<code>fossil_tag</code>), granular add/remove (<code>fossil_add</code>,
+<code>fossil_rm</code>, <code>fossil_addremove</code>,
+<code>fossil_extras</code>), branch management
+(<code>fossil_branch</code>), commit with new branch creation
+(<code>fossil_commit</code>), timeline with path and type filters
+(<code>fossil_timeline</code>), and safe undo/update operations
+(<code>fossil_undo</code>, <code>fossil_update</code>).</li>
+<li><strong>Ticketing &amp; Bug Tracking (3 tools):</strong> List
+(<code>fossil_ticket_list</code>), create
+(<code>fossil_ticket_create</code>), and update tickets
+(<code>fossil_ticket_update</code>) stored directly within the
+repository database.</li>
+<li><strong>Wiki Documentation (3 tools):</strong> List
+(<code>fossil_wiki_ls</code>), export/read
+(<code>fossil_wiki_read</code>), and commit/write
+(<code>fossil_wiki_write</code>) Markdown wiki pages.</li>
+<li><strong>Repository Administration &amp; Setup (3 tools):</strong>
+Initialize new repositories (<code>fossil_init</code>), open
+repositories (<code>fossil_open</code>), and inspect/modify repository
+configurations (<code>fossil_settings</code>).</li>
+</ul></li>
+<li><strong>Headless &amp; Anti-Hang Resilience:</strong>
+<ul>
+<li>Automatically sets <code>stdin</code> to <code>DEVNULL</code> to
+instantly fail interactive CLI prompts (<code>y/N</code>) instead of
+hanging.</li>
+<li>Built-in 30-second timeout mechanism with clean error
+reporting.</li>
+<li>Default <code>--no-warnings</code> and automatic prompt handling on
+commits for binary files and CRLF/LF line endings.</li>
+<li><code>fossil_add</code> uses <code>force=True</code> by default,
+cleanly bypassing <code>ignore-glob</code> confirmation prompts when
+files are explicitly specified.</li>
+</ul></li>
+<li><strong>Centralized Repositories:</strong> Automatically organizes
+repositories into a <code>.fossil_repositories/</code> directory outside
+the active working tree.</li>
+<li><strong>Safety First:</strong> Destructive operations
+(<code>undo</code>, <code>update</code>) are explicitly labeled with
+warnings so AI agents ask for human confirmation before executing.</li>
+</ul>
+<hr />
+<h2 id="books-documentation">📚 Documentation</h2>
+<p>For complete architectural details, AI agent workflows, and the
+in-depth API reference covering all 29 tools, see the <a
+href="MANUAL.html">User Manual &amp; Technical Reference</a>.</p>
+<hr />
+<h2 id="page_facing_up-license">📄 License</h2>
+<p>This project is licensed under the terms of the <strong>MIT</strong>
+License. See the <a href="LICENSE">LICENSE</a> file for complete
+details.</p>
+<hr />
+<h2 id="memo-warranty">📝 Warranty</h2>
+<p>No warranty of any kind is provided!</p>
+
+  </article>
+</main>
+
+<a href="#" class="back-to-top-btn" id="back-to-top">↑ Top</a>
+
+<script>
+(function() {
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  const themeIcon = document.getElementById('theme-icon');
+
+  function updateThemeIcon(theme) {
+    if (themeIcon) {
+      themeIcon.textContent = (theme === 'light') ? '🌙' : '☀️';
+    }
+  }
+
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeIcon(currentTheme);
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = (current === 'dark') ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('fossilsolo_theme', next);
+      updateThemeIcon(next);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

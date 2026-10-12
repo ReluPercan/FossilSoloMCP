@@ -1,0 +1,50 @@
+﻿========================================================================
+FossilSoloMCP v1.0.0 - Fast Installation & Quick Start Guide
+========================================================================
+
+FossilSoloMCP is a Model Context Protocol (MCP) server providing 29
+dedicated tools for Fossil SCM repositories.
+
+Prerequisites:
+  - Fossil SCM binary in system PATH (https://fossil-scm.org/)
+  - Python 3.10+ or uv (https://astral.sh/uv)
+
+------------------------------------------------------------------------
+Quick Documentation:
+------------------------------------------------------------------------
+  - Double-click MANUAL.html for the interactive bilingual manual
+    (Dark/Light mode, Romanian / English switch, full tool index).
+
+------------------------------------------------------------------------
+Option A: Run Directly with uv (Recommended)
+------------------------------------------------------------------------
+Add the server to your client configuration (Claude Desktop, Cursor,
+Antigravity IDE mcp_config.json):
+
+{
+  "mcpServers": {
+    "fossil-scm": {
+      "command": "uv",
+      "args": ["run", "--directory", "C:/path/to/FossilSoloMCP", "fossil-scm-mcp"]
+    }
+  }
+}
+
+------------------------------------------------------------------------
+Option B: Install from the Included Wheel (.whl)
+------------------------------------------------------------------------
+Run in your terminal or virtual environment:
+
+  pip install fossil_scm_mcp-1.0.0-py3-none-any.whl
+
+Then configure the client to run:
+
+{
+  "mcpServers": {
+    "fossil-scm": {
+      "command": "fossil-scm-mcp"
+    }
+  }
+}
+
+========================================================================

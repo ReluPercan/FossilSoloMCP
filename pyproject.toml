@@ -1,0 +1,32 @@
+[project]
+name = "fossil-scm-mcp"
+version = "1.0.0"
+description = "Model Context Protocol (MCP) server for Fossil SCM with 29 specialized tools for AI agents"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Relu Percan" }
+]
+license = { text = "MIT" }
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "fossil",
+    "fossil-scm",
+    "version-control",
+    "ai-agents",
+    "fastmcp"
+]
+dependencies = [
+    "mcp",
+]
+
+[project.scripts]
+fossil-scm-mcp = "fossil_scm_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fossil_scm_mcp"]
