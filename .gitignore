@@ -33,6 +33,17 @@ arh_r/
 .idea/
 .vscode/
 
+# Internal local project kitchen / development notes (kept only in Fossil SCM)
+JURNAL.md
+doc/STARE_*.md
+doc/GHID_AUTENTIFICARE_2FA.md
+doc/RELEASE_NOTES_*_ro.md
+ipoteze.md
+specificatii.md
+NOTE_TEHNICE.md
+avantaje_mcp.md
+mesaj_eroare.txt
+
 # OS-generated files
 .DS_Store
 Thumbs.db

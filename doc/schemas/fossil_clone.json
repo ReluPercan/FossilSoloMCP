@@ -1,0 +1,46 @@
+{
+  "name": "fossil_clone",
+  "description": "Clone a remote or local Fossil repository to a destination .fossil file.\n\nArgs:\n    repository_uri: The source repository URL (http://, https://, ssh://) or local file path.\n    target_file: Path to the destination .fossil repository file to create.\n    http_proxy: Optional HTTP proxy server URL to use during the clone.\n    cwd: Optional working directory for command execution.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "http_proxy": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Http Proxy"
+      },
+      "repository_uri": {
+        "title": "Repository Uri",
+        "type": "string"
+      },
+      "target_file": {
+        "title": "Target File",
+        "type": "string"
+      }
+    },
+    "required": [
+      "repository_uri",
+      "target_file"
+    ],
+    "title": "fossil_cloneArguments",
+    "type": "object"
+  }
+}

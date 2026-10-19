@@ -1,0 +1,56 @@
+{
+  "name": "fossil_addremove",
+  "description": "Add new files to tracking and remove deleted files from disk (prepares for commit).\n\nArgs:\n    dotfiles: Include files/directories beginning with a dot.\n    ignore: Comma-separated list of glob patterns for files to be ignored.\n    clean: Comma-separated list of glob patterns for clean files to be ignored.\n    reset: Reset the ADDED/DELETED state of a check-out (no other options are valid with this option except cwd).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "clean": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Clean"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "dotfiles": {
+        "default": false,
+        "title": "Dotfiles",
+        "type": "boolean"
+      },
+      "ignore": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Ignore"
+      },
+      "reset": {
+        "default": false,
+        "title": "Reset",
+        "type": "boolean"
+      }
+    },
+    "title": "fossil_addremoveArguments",
+    "type": "object"
+  }
+}

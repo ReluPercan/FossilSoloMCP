@@ -6,7 +6,11 @@ from typing import List, Optional
 from mcp.server.fastmcp import FastMCP
 
 # Initialize FastMCP
-mcp = FastMCP("fossil")
+mcp = FastMCP(
+    "fossil",
+    instructions="MCP server providing 31 tools for complete Fossil SCM automation and integration.",
+    website_url="https://github.com/ReluPercan/FossilSoloMCP"
+)
 
 # Global fallback working directory, initialized from environment variables if present
 DEFAULT_CWD: Optional[str] = os.environ.get("FOSSIL_WORKSPACE") or os.environ.get("FOSSIL_CWD")
@@ -129,14 +133,21 @@ def fossil_init(db_name: Optional[str] = None, project_name: Optional[str] = Non
     return feedback
 
 @mcp.tool()
-def fossil_open(db_name: Optional[str] = None, force: bool = False, keep: bool = False, cwd: Optional[str] = None) -> str:
+def fossil_open(
+    db_name: Optional[str] = None,
+    force: bool = False,
+    keep: bool = False,
+    workdir: Optional[str] = None,
+    cwd: Optional[str] = None
+) -> str:
     """Open an existing Fossil repository in the specified or current working directory. Automatically resolves database path if omitted.
     
     Args:
         db_name: Optional name or path of the database to open (defaults to auto-detecting '.fossil_repositories/<project_name>.fossil').
         force: If True, uses the -f (--force) option to override directory not empty restrictions.
         keep: If True, uses the -k (--keep) option to keep local files unchanged.
-        cwd: Optional path to the workspace directory where the repository should be opened.
+        workdir: Optional target working directory where the check-out should be created (--workdir DIR).
+        cwd: Optional path to the workspace directory where the command is executed.
     """
     workspace_dir, repo_db_path, _ = resolve_repo_paths(db_name, cwd)
     
@@ -145,6 +156,8 @@ def fossil_open(db_name: Optional[str] = None, force: bool = False, keep: bool =
         cmd.append("-f")
     if keep:
         cmd.append("-k")
+    if workdir:
+        cmd.extend(["--workdir", workdir])
         
     # 1. Rulam deschiderea repository-ului
     open_res = run_fossil_cmd(cmd, extra_cwd=workspace_dir)
@@ -152,12 +165,13 @@ def fossil_open(db_name: Optional[str] = None, force: bool = False, keep: bool =
         return open_res
         
     # 2. Configuram automat setarile recomandate in repository-ul proaspat deschis local
-    warnings = apply_auto_settings(extra_cwd=workspace_dir)
+    target_checkout_dir = os.path.abspath(workdir) if workdir else workspace_dir
+    warnings = apply_auto_settings(extra_cwd=target_checkout_dir)
     
     # 3. Cream si adaugam .editorconfig daca acesta nu exista deja in workspace
     editorconfig_created = False
-    if os.path.isdir(workspace_dir):
-        editorconfig_path = os.path.join(workspace_dir, ".editorconfig")
+    if os.path.isdir(target_checkout_dir):
+        editorconfig_path = os.path.join(target_checkout_dir, ".editorconfig")
         if not os.path.exists(editorconfig_path):
             try:
                 editorconfig_content = (
@@ -171,7 +185,7 @@ def fossil_open(db_name: Optional[str] = None, force: bool = False, keep: bool =
                 editorconfig_created = True
                 
                 # Adaugam .editorconfig nou creat in Fossil pentru a fi versionat
-                run_fossil_cmd(["add", ".editorconfig"], extra_cwd=workspace_dir)
+                run_fossil_cmd(["add", ".editorconfig"], extra_cwd=target_checkout_dir)
             except Exception:
                 pass
 
@@ -185,6 +199,43 @@ def fossil_open(db_name: Optional[str] = None, force: bool = False, keep: bool =
         feedback += "\nCreated and added '.editorconfig' to workspace (configured for LF lines)."
         
     return feedback
+
+@mcp.tool()
+def fossil_close(force: bool = False, cwd: Optional[str] = None) -> str:
+    """Close the open Fossil check-out in the current or specified working directory.
+    
+    Args:
+        force: If True, uses the -f (--force) option to close even if there are uncommitted local changes or stash.
+        cwd: Optional path to the directory where the check-out is currently open.
+    """
+    cmd = ["close"]
+    if force:
+        cmd.append("-f")
+    return run_fossil_cmd(cmd, extra_cwd=cwd)
+
+@mcp.tool()
+def fossil_clone(
+    repository_uri: str,
+    target_file: str,
+    http_proxy: Optional[str] = None,
+    cwd: Optional[str] = None
+) -> str:
+    """Clone a remote or local Fossil repository to a destination .fossil file.
+    
+    Args:
+        repository_uri: The source repository URL (http://, https://, ssh://) or local file path.
+        target_file: Path to the destination .fossil repository file to create.
+        http_proxy: Optional HTTP proxy server URL to use during the clone.
+        cwd: Optional working directory for command execution.
+    """
+    target_dir = os.path.dirname(os.path.abspath(target_file))
+    if target_dir:
+        os.makedirs(target_dir, exist_ok=True)
+        
+    cmd = ["clone", repository_uri, target_file]
+    if http_proxy:
+        cmd.extend(["--proxy", http_proxy])
+    return run_fossil_cmd(cmd, extra_cwd=cwd)
 
 @mcp.tool()
 def fossil_settings(name: Optional[str] = None, value: Optional[str] = None, cwd: Optional[str] = None) -> str:

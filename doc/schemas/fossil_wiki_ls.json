@@ -1,0 +1,22 @@
+{
+  "name": "fossil_wiki_ls",
+  "description": "Return the list of all existing wiki pages.\n\nArgs:\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      }
+    },
+    "title": "fossil_wiki_lsArguments",
+    "type": "object"
+  }
+}

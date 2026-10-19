@@ -1,8 +1,8 @@
-﻿========================================================================
-FossilSoloMCP v1.0.0 - Fast Installation & Quick Start Guide
+========================================================================
+FossilSoloMCP v1.0.1 - Fast Installation & Quick Start Guide
 ========================================================================
 
-FossilSoloMCP is a Model Context Protocol (MCP) server providing 29
+FossilSoloMCP is a Model Context Protocol (MCP) server providing 31
 dedicated tools for Fossil SCM repositories.
 
 Prerequisites:
@@ -14,12 +14,28 @@ Quick Documentation:
 ------------------------------------------------------------------------
   - Double-click MANUAL.html for the interactive bilingual manual
     (Dark/Light mode, Romanian / English switch, full tool index).
+  - Check README.md (English) or doc/citeste-ma.md (Romanian) for
+    complete overview and configuration examples.
 
 ------------------------------------------------------------------------
-Option A: Run Directly with uv (Recommended)
+Option A: Run Instantly with uvx (Zero-Install, Recommended)
 ------------------------------------------------------------------------
-Add the server to your client configuration (Claude Desktop, Cursor,
-Antigravity IDE mcp_config.json):
+Add the server directly to your client configuration (Claude Desktop,
+Cursor, Antigravity IDE mcp_config.json) without manually cloning code:
+
+{
+  "mcpServers": {
+    "fossil-scm": {
+      "command": "uvx",
+      "args": ["fossil-scm-mcp"]
+    }
+  }
+}
+
+------------------------------------------------------------------------
+Option B: Run from Local Directory with uv
+------------------------------------------------------------------------
+If running from a cloned repository or extracted folder:
 
 {
   "mcpServers": {
@@ -31,13 +47,17 @@ Antigravity IDE mcp_config.json):
 }
 
 ------------------------------------------------------------------------
-Option B: Install from the Included Wheel (.whl)
+Option C: Install from Wheel (.whl) or PyPI
 ------------------------------------------------------------------------
 Run in your terminal or virtual environment:
 
-  pip install fossil_scm_mcp-1.0.0-py3-none-any.whl
+  pip install fossil_scm_mcp-1.0.1-py3-none-any.whl
 
-Then configure the client to run:
+Or from PyPI:
+
+  pip install fossil-scm-mcp
+
+Then configure your client:
 
 {
   "mcpServers": {

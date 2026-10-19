@@ -1,0 +1,27 @@
+{
+  "name": "fossil_undo",
+  "description": "WARNING: Destructive action. Undo the last update, revert, or merge operation in the current workspace. Ensure you have user permission.\n\nArgs:\n    dry_run: If True, simulates the undo by running with -n flag (does not modify files).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "dry_run": {
+        "default": false,
+        "title": "Dry Run",
+        "type": "boolean"
+      }
+    },
+    "title": "fossil_undoArguments",
+    "type": "object"
+  }
+}

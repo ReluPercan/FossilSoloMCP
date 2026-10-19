@@ -1,0 +1,34 @@
+{
+  "name": "fossil_finfo",
+  "description": "Show the revision history (file info) for a specific file.\n\nArgs:\n    file: The file name or path to inspect.\n    limit: Number of events to show (default: 20).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "file": {
+        "title": "File",
+        "type": "string"
+      },
+      "limit": {
+        "default": 20,
+        "title": "Limit",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "file"
+    ],
+    "title": "fossil_finfoArguments",
+    "type": "object"
+  }
+}

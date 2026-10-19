@@ -1,0 +1,42 @@
+{
+  "name": "fossil_add",
+  "description": "Make arrangements to add one or more files or directories to the repository.\n\nArgs:\n    files: List of file or directory paths to add.\n    dotfiles: Include files/directories beginning with a dot when adding recursively.\n    force: Add files even if they match ignore-glob patterns without prompting (defaults to True).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "dotfiles": {
+        "default": false,
+        "title": "Dotfiles",
+        "type": "boolean"
+      },
+      "files": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Files",
+        "type": "array"
+      },
+      "force": {
+        "default": true,
+        "title": "Force",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "files"
+    ],
+    "title": "fossil_addArguments",
+    "type": "object"
+  }
+}

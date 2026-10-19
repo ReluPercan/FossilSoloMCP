@@ -1,0 +1,56 @@
+{
+  "name": "fossil_open",
+  "description": "Open an existing Fossil repository in the specified or current working directory. Automatically resolves database path if omitted.\n\nArgs:\n    db_name: Optional name or path of the database to open (defaults to auto-detecting '.fossil_repositories/<project_name>.fossil').\n    force: If True, uses the -f (--force) option to override directory not empty restrictions.\n    keep: If True, uses the -k (--keep) option to keep local files unchanged.\n    workdir: Optional target working directory where the check-out should be created (--workdir DIR).\n    cwd: Optional path to the workspace directory where the command is executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "db_name": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Db Name"
+      },
+      "force": {
+        "default": false,
+        "title": "Force",
+        "type": "boolean"
+      },
+      "keep": {
+        "default": false,
+        "title": "Keep",
+        "type": "boolean"
+      },
+      "workdir": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Workdir"
+      }
+    },
+    "title": "fossil_openArguments",
+    "type": "object"
+  }
+}

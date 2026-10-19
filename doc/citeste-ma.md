@@ -9,7 +9,7 @@
 
 # Fossil SCM - Server MCP
 
-Un server robust bazat pe protocolul Model Context Protocol (MCP) ce oferă acces programatic complet și non-interactiv (headless) la depozitele **Fossil SCM**. Acesta expune **29 de unelte dedicate** care acoperă Controlul Versiunilor, Administrarea & Setările Depozitului, Sistemul de Tichete (Bug Tracking) și Documentația Wiki, concepute special pentru agenți AI (Google Antigravity, Claude Desktop, Cursor etc.).
+Un server robust bazat pe protocolul Model Context Protocol (MCP) ce oferă acces programatic complet și non-interactiv (headless) la depozitele **Fossil SCM**. Acesta expune **31 de unelte dedicate** care acoperă Controlul Versiunilor, Administrarea & Setările Depozitului, Sistemul de Tichete (Bug Tracking) și Documentația Wiki, concepute special pentru agenți AI (Google Antigravity, Claude Desktop, Cursor etc.).
 
 ## Cerințe preliminare
 
@@ -59,11 +59,11 @@ Pentru a integra acest server MCP cu Claude Desktop, Google Antigravity sau alț
 
 ## Caracteristici și Funcționalități Cheie
 
-- **29 de Unelte Specializate:**
+- **31 de Unelte Specializate:**
   - **Controlul Versiunilor (20 de unelte):** Starea spațiului de lucru (`fossil_status`), diferențe cu suport pentru revizii și ramuri (`fossil_diff`), vizualizare istorică a fișierelor fără checkout (`fossil_cat`), istoric per fișier (`fossil_finfo`), restaurare granulară a fișierelor (`fossil_revert`), redenumire fișiere cu conservarea istoricului în graful DAG (`fossil_mv`), igienizarea spațiului de lucru (`fossil_clean`), fuzionarea ramurilor cu închidere automată (`fossil_merge`), depozitare temporară/stash (`fossil_stash`), etichete simbolice/taguri (`fossil_tag`), adăugare/eliminare granulară (`fossil_add`, `fossil_rm`, `fossil_addremove`, `fossil_extras`), gestionarea ramurilor (`fossil_branch`), comitere cu creare directă de ramură (`fossil_commit`), cronologie/timeline cu filtre pe cale și tip (`fossil_timeline`), precum și operațiuni sigure de anulare și actualizare (`fossil_undo`, `fossil_update`).
   - **Tichete & Urmărire Erori (3 unelte):** Listare (`fossil_ticket_list`), creare (`fossil_ticket_create`) și actualizare tichete (`fossil_ticket_update`), stocate direct în baza de date a depozitului.
   - **Documentație Wiki (3 unelte):** Listare (`fossil_wiki_ls`), export/citire (`fossil_wiki_read`) și comitere/scriere (`fossil_wiki_write`) pagini wiki în format Markdown.
-  - **Administrare & Configurare Depozit (3 unelte):** Inițializare depozite noi (`fossil_init`), deschidere depozite (`fossil_open`) și inspectare/modificare setări (`fossil_settings`).
+  - **Administrare & Configurare Depozit (5 unelte):** Inițializare depozite noi (`fossil_init`), deschidere depozite (`fossil_open`), închidere checkout activ (`fossil_close`), clonare depozite la distanță sau locale (`fossil_clone`) și inspectare/modificare setări (`fossil_settings`).
 - **Reziliență Non-Interactivă & Anti-Hang:**
   - Redirecționează automat `stdin` către `DEVNULL` pentru a eșua imediat prompturile interactive CLI (`y/N`) în loc să blocheze execuția.
   - Mecanism integrat de timeout la 30 de secunde cu raportare clară a erorilor.
@@ -76,7 +76,7 @@ Pentru a integra acest server MCP cu Claude Desktop, Google Antigravity sau alț
 
 ## 📚 Documentație Completă
 
-Pentru detalii arhitecturale avansate, ghiduri de fluxuri AI și referința completă a tuturor celor 29 de instrumente, consultați [Manualul de Utilizare și Referință Tehnică](MANUAL_UTILIZARE.md).
+Pentru detalii arhitecturale avansate, ghiduri de fluxuri AI și referința completă a tuturor celor 31 de instrumente, consultați [Manualul de Utilizare și Referință Tehnică](MANUAL_UTILIZARE.md).
 
 ---
 

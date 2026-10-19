@@ -1,0 +1,49 @@
+{
+  "name": "fossil_revert",
+  "description": "Revert uncommitted local changes for specific files, or all files if omitted.\n\nArgs:\n    files: Optional list of specific files to revert. If omitted, reverts all modified files.\n    revision: Optional revision to revert to (-r).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "files": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Files"
+      },
+      "revision": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Revision"
+      }
+    },
+    "title": "fossil_revertArguments",
+    "type": "object"
+  }
+}

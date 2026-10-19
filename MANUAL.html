@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ro" data-theme="dark">
 <head>
   <meta charset="UTF-8">
@@ -286,6 +286,10 @@
     color: inherit;
     font-size: 1em;
   }
+  pre.text, .important pre, .tip pre, .warning pre, .caution pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
 
   .kw, .cf { color: #f472b6; font-weight: 600; }
   .dt { color: #38bdf8; }
@@ -526,7 +530,7 @@ fără să fie nevoie de Nginx, Docker sau baze de date externe.</li>
 <h3 id="rolul-serverului-fossilsolomcp">Rolul serverului
 FossilSoloMCP</h3>
 <p>Acest server MCP acționează ca o punte de comunicație de mare viteză
-între modelele LLM și depozitele Fossil, expunând <strong>29 de unelte
+între modelele LLM și depozitele Fossil, expunând <strong>31 de unelte
 specializate</strong> prin protocolul standardizat MCP (Model Context
 Protocol).</p>
 <hr />
@@ -604,8 +608,8 @@ mediu bazat pe Python și automatizări AI.</li>
 </ul></li>
 </ol>
 <hr />
-<h3 id="trecerea-la-fossilsolomcp-rescriere-și-maturizare">Trecerea la
-<code>FossilSoloMCP</code>: Rescriere și Maturizare</h3>
+<h3 id="trecerea-la-fossilsolomcp-reproiectare-și-rescriere">Trecerea la
+<code>FossilSoloMCP</code>: Reproiectare și Rescriere</h3>
 <p>S-a luat decizia strategică de a rescrie serverul complet de la zero
 în <strong>Python</strong>, folosind framework-ul performant
 <strong>FastMCP</strong>.</p>
@@ -629,7 +633,7 @@ gestionat ultrarapid prin <code>uv</code></td>
 <tr>
 <td style="text-align: left;"><strong>Număr Unelte Expuse</strong></td>
 <td style="text-align: left;">Exact 10 unelte</td>
-<td style="text-align: left;"><strong>29 de unelte complete și
+<td style="text-align: left;"><strong>31 de unelte complete și
 specializate</strong></td>
 </tr>
 <tr>
@@ -637,7 +641,7 @@ specializate</strong></td>
 (CWD)</strong></td>
 <td style="text-align: left;">Static, fixat la pornire via env vars</td>
 <td style="text-align: left;"><strong>Dinamic per apel
-(<code>cwd</code>)</strong> pe toate cele 29 de unelte</td>
+(<code>cwd</code>)</strong> pe toate cele 31 de unelte</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Organizare Depozite</strong></td>
@@ -967,7 +971,7 @@ de fișiere de pe disc:</p>
 </ol>
 <hr />
 <h2 id="6-referința-completă-a-celor-29-de-instrumente-mcp">6. Referința
-Completă a Celor 29 de Instrumente MCP</h2>
+Completă a Celor 31 de Instrumente MCP</h2>
 <h3 id="a-version-control-20-instrumente">A. Version Control (20
 Instrumente)</h3>
 <h4 id="1-fossil_status">1. <code>fossil_status</code></h4>
@@ -1305,8 +1309,8 @@ lucru.</li>
 </ul></li>
 </ul>
 <hr />
-<h3 id="b-administrare--depozit-3-instrumente">B. Administrare &amp;
-Depozit (3 Instrumente)</h3>
+<h3 id="b-administrare--depozit-5-instrumente">B. Administrare &amp;
+Depozit (5 Instrumente)</h3>
 <h4 id="21-fossil_init">21. <code>fossil_init</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Creează și configurează o nouă bază de
@@ -1333,11 +1337,42 @@ calea depozitului <code>.fossil</code>.</li>
 deschiderea chiar dacă directorul nu e gol (<code>-f</code>).</li>
 <li><code>keep</code> <em>(boolean, default: false)</em>: Păstrează
 fișierele locale existente (<code>-k</code>).</li>
+<li><code>workdir</code> <em>(string, opțional)</em>: Directorul țintă
+în care se va deschide checkout-ul (implicit directorul părinte al
+depozitului).</li>
 <li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
 lucru.</li>
 </ul></li>
 </ul>
-<h4 id="23-fossil_settings">23. <code>fossil_settings</code></h4>
+<h4 id="23-fossil_close">23. <code>fossil_close</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Închide checkout-ul Fossil activ din
+directorul specificat, decuplând spațiul de lucru de fișierul depozit.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>force</code> <em>(boolean, default: false)</em>: Forțează
+închiderea chiar dacă există modificări locale necomise (<code>-f</code>).</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="24-fossil_clone">24. <code>fossil_clone</code></h4>
+<ul>
+<li><strong>Descriere:</strong> Clonează un depozit Fossil de la un URL la
+distanță (HTTP/HTTPS/SSH) sau dintr-o cale locală direct într-un fișier bază
+de date <code>.fossil</code>, fără a deschide checkout în directorul
+curent.</li>
+<li><strong>Parametri:</strong>
+<ul>
+<li><code>url_or_path</code> <em>(string, obligatoriu)</em>: URL-ul la
+distanță (HTTP/HTTPS/SSH) sau calea fișierului local sursă.</li>
+<li><code>repository_path</code> <em>(string, obligatoriu)</em>: Calea
+fișierului <code>.fossil</code> destinație.</li>
+<li><code>cwd</code> <em>(string, opțional)</em>: Directorul de
+lucru.</li>
+</ul></li>
+</ul>
+<h4 id="25-fossil_settings">25. <code>fossil_settings</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Consultă sau modifică proprietățile și
 setările depozitului (<code>crlf-glob</code>, <code>binary-glob</code>,
@@ -1355,7 +1390,7 @@ lucru.</li>
 <hr />
 <h3 id="c-sistemul-de-ticketing-3-instrumente">C. Sistemul de Ticketing
 (3 Instrumente)</h3>
-<h4 id="24-fossil_ticket_list">24. <code>fossil_ticket_list</code></h4>
+<h4 id="26-fossil_ticket_list">26. <code>fossil_ticket_list</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Listează tichetele existente în depozit
 (cu fallback automat pe interogare directă SQLite dacă rapoartele Fossil
@@ -1368,7 +1403,7 @@ raportului standard Fossil.</li>
 lucru.</li>
 </ul></li>
 </ul>
-<h4 id="25-fossil_ticket_create">25.
+<h4 id="27-fossil_ticket_create">27.
 <code>fossil_ticket_create</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Deschide un tichet nou în sistemul de
@@ -1388,7 +1423,7 @@ opțional)</em>: Câmpuri adiționale (ex: <code>type</code>,
 lucru.</li>
 </ul></li>
 </ul>
-<h4 id="26-fossil_ticket_update">26.
+<h4 id="28-fossil_ticket_update">28.
 <code>fossil_ticket_update</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Modifică un câmp sau statusul unui
@@ -1409,7 +1444,7 @@ lucru.</li>
 <hr />
 <h3 id="d-sistemul-wiki-3-instrumente">D. Sistemul Wiki (3
 Instrumente)</h3>
-<h4 id="27-fossil_wiki_ls">27. <code>fossil_wiki_ls</code></h4>
+<h4 id="29-fossil_wiki_ls">29. <code>fossil_wiki_ls</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Returnează lista tuturor paginilor wiki
 existente în depozit.</li>
@@ -1419,7 +1454,7 @@ existente în depozit.</li>
 lucru.</li>
 </ul></li>
 </ul>
-<h4 id="28-fossil_wiki_read">28. <code>fossil_wiki_read</code></h4>
+<h4 id="30-fossil_wiki_read">30. <code>fossil_wiki_read</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Citește și returnează conținutul complet
 în format text/markdown al paginii wiki solicitate.</li>
@@ -1431,7 +1466,7 @@ paginii wiki.</li>
 lucru.</li>
 </ul></li>
 </ul>
-<h4 id="29-fossil_wiki_write">29. <code>fossil_wiki_write</code></h4>
+<h4 id="31-fossil_wiki_write">31. <code>fossil_wiki_write</code></h4>
 <ul>
 <li><strong>Descriere:</strong> Creează o pagină wiki nouă sau
 actualizează conținutul unei pagini existente în depozit.</li>
@@ -1631,7 +1666,7 @@ external databases.</li>
 FossilSoloMCP Server</h3>
 <p>This MCP server acts as a high-speed communication bridge between
 Large Language Models (LLMs) and Fossil repositories, exposing
-<strong>29 specialized tools</strong> via the standardized Model Context
+<strong>31 specialized tools</strong> via the standardized Model Context
 Protocol (MCP).</p>
 <hr />
 <h2 id="2-history-origin-and-comparison-with-agent-vc-mcp">2. History,
@@ -1710,8 +1745,8 @@ environments built around Python and modern AI automation.</li>
 </ol>
 <hr />
 <h3
-id="transition-to-fossilsolomcp-complete-rewrite--maturation">Transition
-to <code>FossilSoloMCP</code>: Complete Rewrite &amp; Maturation</h3>
+id="transition-to-fossilsolomcp-redesign-and-rewrite">Transition
+to <code>FossilSoloMCP</code>: Redesign and Rewrite</h3>
 <p>The strategic decision was made to rewrite the server entirely from
 scratch in <strong>Python</strong>, utilizing the high-performance
 <strong>FastMCP</strong> framework.</p>
@@ -1737,7 +1772,7 @@ managed ultrarapidly via <code>uv</code></td>
 <td style="text-align: left;"><strong>Number of Tools
 Exposed</strong></td>
 <td style="text-align: left;">Exactly 10 tools</td>
-<td style="text-align: left;"><strong>29 complete, specialized
+<td style="text-align: left;"><strong>31 complete, specialized
 tools</strong></td>
 </tr>
 <tr>
@@ -1745,7 +1780,7 @@ tools</strong></td>
 (CWD)</strong></td>
 <td style="text-align: left;">Static, fixed at startup via env vars</td>
 <td style="text-align: left;"><strong>Dynamic per call
-(<code>cwd</code>)</strong> across all 29 tools</td>
+(<code>cwd</code>)</strong> across all 31 tools</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Repository
@@ -2075,8 +2110,8 @@ depend on loose disk files:</p>
 <code>fossil_wiki_write(page_name="DesignDecisions", content="# Architecture...", cwd="...")</code></li>
 </ol>
 <hr />
-<h2 id="6-complete-reference-of-the-29-mcp-tools">6. Complete Reference
-of the 29 MCP Tools</h2>
+<h2 id="6-complete-reference-of-the-31-mcp-tools">6. Complete Reference
+of the 31 MCP Tools</h2>
 <h3 id="a-version-control-20-tools">A. Version Control (20 Tools)</h3>
 <h4 id="1-fossil_status">1. <code>fossil_status</code></h4>
 <ul>
@@ -2403,8 +2438,8 @@ path.</li>
 </ul></li>
 </ul>
 <hr />
-<h3 id="b-repository-administration--setup-3-tools">B. Repository
-Administration &amp; Setup (3 Tools)</h3>
+<h3 id="b-repository-administration--setup-5-tools">B. Repository
+Administration &amp; Setup (5 Tools)</h3>
 <h4 id="21-fossil_init">21. <code>fossil_init</code></h4>
 <ul>
 <li><strong>Description:</strong> Creates and initializes a new Fossil
@@ -2432,11 +2467,43 @@ database in the specified directory.</li>
 even if directory is non-empty (<code>-f</code>).</li>
 <li><code>keep</code> <em>(boolean, default: false)</em>: Preserves
 existing local files (<code>-k</code>).</li>
+<li><code>workdir</code> <em>(string, optional)</em>: Target directory
+where the checkout should be opened (defaults to repository parent
+folder).</li>
 <li><code>cwd</code> <em>(string, optional)</em>: Working directory
 path.</li>
 </ul></li>
 </ul>
-<h4 id="23-fossil_settings">23. <code>fossil_settings</code></h4>
+<h4 id="23-fossil_close">23. <code>fossil_close</code></h4>
+<ul>
+<li><strong>Description:</strong> Closes the active Fossil checkout in
+the specified directory, disconnecting the working tree from the
+repository database.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>force</code> <em>(boolean, default: false)</em>: Forces
+closure even if uncommitted changes exist (<code>-f</code>).</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="24-fossil_clone">24. <code>fossil_clone</code></h4>
+<ul>
+<li><strong>Description:</strong> Clones a Fossil repository from a
+remote URL (HTTP/HTTPS/SSH) or a local file path into a target
+<code>.fossil</code> database file without opening a working
+directory.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>url_or_path</code> <em>(string, required)</em>: Remote URL
+(HTTP/HTTPS/SSH) or local file path to clone from.</li>
+<li><code>repository_path</code> <em>(string, required)</em>: Target
+<code>.fossil</code> file path.</li>
+<li><code>cwd</code> <em>(string, optional)</em>: Working directory
+path.</li>
+</ul></li>
+</ul>
+<h4 id="25-fossil_settings">25. <code>fossil_settings</code></h4>
 <ul>
 <li><strong>Description:</strong> Inspects or modifies repository
 configuration properties (<code>crlf-glob</code>,
@@ -2454,7 +2521,7 @@ path.</li>
 </ul>
 <hr />
 <h3 id="c-ticketing-system-3-tools">C. Ticketing System (3 Tools)</h3>
-<h4 id="24-fossil_ticket_list">24. <code>fossil_ticket_list</code></h4>
+<h4 id="26-fossil_ticket_list">26. <code>fossil_ticket_list</code></h4>
 <ul>
 <li><strong>Description:</strong> Lists existing tickets in the
 repository (includes automatic fallback to direct SQLite querying if
@@ -2467,7 +2534,7 @@ report number.</li>
 path.</li>
 </ul></li>
 </ul>
-<h4 id="25-fossil_ticket_create">25.
+<h4 id="27-fossil_ticket_create">27.
 <code>fossil_ticket_create</code></h4>
 <ul>
 <li><strong>Description:</strong> Opens a new ticket in the repository's
@@ -2487,7 +2554,7 @@ optional)</em>: Additional fields (e.g., <code>type</code>,
 path.</li>
 </ul></li>
 </ul>
-<h4 id="26-fossil_ticket_update">26.
+<h4 id="28-fossil_ticket_update">28.
 <code>fossil_ticket_update</code></h4>
 <ul>
 <li><strong>Description:</strong> Modifies a field or status of an
@@ -2506,7 +2573,7 @@ path.</li>
 </ul>
 <hr />
 <h3 id="d-wiki-system-3-tools">D. Wiki System (3 Tools)</h3>
-<h4 id="27-fossil_wiki_ls">27. <code>fossil_wiki_ls</code></h4>
+<h4 id="29-fossil_wiki_ls">29. <code>fossil_wiki_ls</code></h4>
 <ul>
 <li><strong>Description:</strong> Returns a list of all wiki pages
 present in the repository.</li>
@@ -2516,7 +2583,7 @@ present in the repository.</li>
 path.</li>
 </ul></li>
 </ul>
-<h4 id="28-fossil_wiki_read">28. <code>fossil_wiki_read</code></h4>
+<h4 id="30-fossil_wiki_read">30. <code>fossil_wiki_read</code></h4>
 <ul>
 <li><strong>Description:</strong> Reads and returns complete
 text/markdown content of requested wiki page.</li>
@@ -2528,7 +2595,7 @@ name.</li>
 path.</li>
 </ul></li>
 </ul>
-<h4 id="29-fossil_wiki_write">29. <code>fossil_wiki_write</code></h4>
+<h4 id="31-fossil_wiki_write">31. <code>fossil_wiki_write</code></h4>
 <ul>
 <li><strong>Description:</strong> Creates a new wiki page or updates
 content of an existing wiki page in the repository.</li>

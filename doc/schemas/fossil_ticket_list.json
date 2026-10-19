@@ -1,0 +1,27 @@
+{
+  "name": "fossil_ticket_list",
+  "description": "Extract the list of tickets from the system.\n\nArgs:\n    report: The ticket report style or ID to show (default: \"1\").\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "report": {
+        "default": "1",
+        "title": "Report",
+        "type": "string"
+      }
+    },
+    "title": "fossil_ticket_listArguments",
+    "type": "object"
+  }
+}

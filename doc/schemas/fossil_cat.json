@@ -1,0 +1,41 @@
+{
+  "name": "fossil_cat",
+  "description": "Extract and display the contents of a file from a specified revision without modifying the workspace.\n\nArgs:\n    file: The file path or name to extract.\n    revision: Optional check-in or revision (-r). If omitted, uses the current checkout version.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "file": {
+        "title": "File",
+        "type": "string"
+      },
+      "revision": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Revision"
+      }
+    },
+    "required": [
+      "file"
+    ],
+    "title": "fossil_catArguments",
+    "type": "object"
+  }
+}

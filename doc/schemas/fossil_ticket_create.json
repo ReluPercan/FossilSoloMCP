@@ -1,0 +1,49 @@
+{
+  "name": "fossil_ticket_create",
+  "description": "Create a new ticket.\n\nArgs:\n    title: The title of the ticket.\n    status: The initial status of the ticket (default: \"Open\").\n    additional_fields: Optional list of field-value pairs, e.g., ['subsystem', 'UI', 'type', 'Bug'].\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "additional_fields": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Additional Fields"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "status": {
+        "default": "Open",
+        "title": "Status",
+        "type": "string"
+      },
+      "title": {
+        "title": "Title",
+        "type": "string"
+      }
+    },
+    "required": [
+      "title"
+    ],
+    "title": "fossil_ticket_createArguments",
+    "type": "object"
+  }
+}

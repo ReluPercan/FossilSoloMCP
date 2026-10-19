@@ -1,1 +1,51 @@
-{"name":"fossil_mv","description":"Rename or move a file or directory in the Fossil repository and optionally on disk.\n\nExplicitly records the rename event (RENAME), preserving history continuity\nin the Fossil version graph (DAG).\n\nArgs:\n    old_name: Source file or directory path/name.\n    new_name: Destination file or directory path/name.\n    hard: If True (default), moves/renames the file physically on disk as well (--hard).\n          If False, only records the rename intention in the manifest (--soft).\n    case_sensitive: Override case-sensitive setting (--case-sensitive 1/0).\n    cwd: Optional path to the directory where the command should be executed.\n","parameters":{"properties":{"old_name":{"title":"Old Name","type":"string"},"new_name":{"title":"New Name","type":"string"},"hard":{"default":true,"title":"Hard","type":"boolean"},"case_sensitive":{"anyOf":[{"type":"boolean"},{"type":"null"}],"default":null,"title":"Case Sensitive"},"cwd":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Cwd"}},"required":["old_name","new_name"],"title":"fossil_mvArguments","type":"object"}}
+{
+  "name": "fossil_mv",
+  "description": "Rename or move a file or directory in the Fossil repository and optionally on disk.\n\nExplicitly records the rename event (RENAME), preserving history continuity\nin the Fossil version graph (DAG).\n\nArgs:\n    old_name: Source file or directory path/name.\n    new_name: Destination file or directory path/name.\n    hard: If True (default), moves/renames the file physically on disk as well (--hard).\n          If False, only records the rename intention in the manifest (--soft).\n    case_sensitive: Override case-sensitive setting (--case-sensitive 1/0).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "case_sensitive": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Case Sensitive"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "hard": {
+        "default": true,
+        "title": "Hard",
+        "type": "boolean"
+      },
+      "new_name": {
+        "title": "New Name",
+        "type": "string"
+      },
+      "old_name": {
+        "title": "Old Name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "old_name",
+      "new_name"
+    ],
+    "title": "fossil_mvArguments",
+    "type": "object"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "fossil_stash",
+  "description": "Manage the local Fossil stash (temporary modifications storage).\n\nArgs:\n    action: Stash sub-command: 'save', 'snapshot', 'ls', 'pop', 'apply', 'drop', 'diff'.\n    comment: Optional comment when saving a stash (for 'save' or 'snapshot').\n    stash_id: Optional stash ID (for 'pop', 'apply', 'drop', 'diff').\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "action": {
+        "default": "ls",
+        "title": "Action",
+        "type": "string"
+      },
+      "comment": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Comment"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "stash_id": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Stash Id"
+      }
+    },
+    "title": "fossil_stashArguments",
+    "type": "object"
+  }
+}

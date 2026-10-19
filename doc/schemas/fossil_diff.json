@@ -1,0 +1,83 @@
+{
+  "name": "fossil_diff",
+  "description": "Show code differences between revisions or the current workspace.\n\nArgs:\n    from_version: Starting check-in or revision (--from).\n    to_version: Ending check-in or revision (--to).\n    files: Optional list of files to diff.\n    branch: Show diff across branches (--branch).\n    brief: Show only the list of changed files (--brief).\n    ignore_whitespace: Ignore whitespace differences (-w).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "branch": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Branch"
+      },
+      "brief": {
+        "default": false,
+        "title": "Brief",
+        "type": "boolean"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "files": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Files"
+      },
+      "from_version": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "From Version"
+      },
+      "ignore_whitespace": {
+        "default": false,
+        "title": "Ignore Whitespace",
+        "type": "boolean"
+      },
+      "to_version": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "To Version"
+      }
+    },
+    "title": "fossil_diffArguments",
+    "type": "object"
+  }
+}

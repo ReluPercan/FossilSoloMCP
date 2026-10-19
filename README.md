@@ -9,7 +9,7 @@
 
 # Fossil SCM - MCP Server
 
-A robust Model Context Protocol (MCP) server providing comprehensive, headless programmatic access to **Fossil SCM** repositories. It exposes **29 dedicated tools** covering Version Control, Repository Administration & Settings, Bug/Task Ticketing, and Wiki management, tailored specifically for AI agents (Google Antigravity, Claude Desktop, Cursor, etc.).
+A robust Model Context Protocol (MCP) server providing comprehensive, headless programmatic access to **Fossil SCM** repositories. It exposes **31 dedicated tools** covering Version Control, Repository Administration & Settings, Bug/Task Ticketing, and Wiki management, tailored specifically for AI agents (Google Antigravity, Claude Desktop, Cursor, etc.).
 
 ## Prerequisites
 
@@ -59,11 +59,11 @@ To integrate this MCP server with Claude Desktop, Google Antigravity, or other M
 
 ## Key Features & Capabilities
 
-- **29 Specialized Tools:**
+- **31 Specialized Tools:**
   - **Version Control (20 tools):** Workspace status (`fossil_status`), diff with revision and branch support (`fossil_diff`), historical file inspection without checkout (`fossil_cat`), per-file commit history (`fossil_finfo`), granular file restoration (`fossil_revert`), DAG-preserving file rename (`fossil_mv`), workspace cleanup (`fossil_clean`), branch merging with auto-close (`fossil_merge`), temporary stash management (`fossil_stash`), symbolic tag management (`fossil_tag`), granular add/remove (`fossil_add`, `fossil_rm`, `fossil_addremove`, `fossil_extras`), branch management (`fossil_branch`), commit with new branch creation (`fossil_commit`), timeline with path and type filters (`fossil_timeline`), and safe undo/update operations (`fossil_undo`, `fossil_update`).
   - **Ticketing & Bug Tracking (3 tools):** List (`fossil_ticket_list`), create (`fossil_ticket_create`), and update tickets (`fossil_ticket_update`) stored directly within the repository database.
   - **Wiki Documentation (3 tools):** List (`fossil_wiki_ls`), export/read (`fossil_wiki_read`), and commit/write (`fossil_wiki_write`) Markdown wiki pages.
-  - **Repository Administration & Setup (3 tools):** Initialize new repositories (`fossil_init`), open repositories (`fossil_open`), and inspect/modify repository configurations (`fossil_settings`).
+  - **Repository Administration & Setup (5 tools):** Initialize new repositories (`fossil_init`), open repositories (`fossil_open`), close active checkouts (`fossil_close`), clone remote or local repositories (`fossil_clone`), and inspect/modify repository configurations (`fossil_settings`).
 - **Headless & Anti-Hang Resilience:**
   - Automatically sets `stdin` to `DEVNULL` to instantly fail interactive CLI prompts (`y/N`) instead of hanging.
   - Built-in 30-second timeout mechanism with clean error reporting.
@@ -76,7 +76,7 @@ To integrate this MCP server with Claude Desktop, Google Antigravity, or other M
 
 ## 📚 Documentation
 
-For complete architectural details, AI agent workflows, and the in-depth API reference covering all 29 tools, see the [User Manual & Technical Reference](Manual.md).
+For complete architectural details, AI agent workflows, and the in-depth API reference covering all 31 tools, see the [User Manual & Technical Reference](Manual.md).
 
 ---
 

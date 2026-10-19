@@ -1,0 +1,46 @@
+{
+  "name": "fossil_settings",
+  "description": "Read or change Fossil repository settings (e.g. crlf-glob, binary-glob, ignore-glob, autosync).\n\nArgs:\n    name: Optional name of the setting to view or configure. If omitted, lists all settings and their current values.\n    value: Optional value to assign to the setting. If omitted (and name is provided), displays the current value of 'name'.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "name": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Name"
+      },
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Value"
+      }
+    },
+    "title": "fossil_settingsArguments",
+    "type": "object"
+  }
+}

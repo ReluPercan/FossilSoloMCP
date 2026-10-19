@@ -1,0 +1,37 @@
+{
+  "name": "fossil_branch",
+  "description": "Manage branches.\n\nArgs:\n    action: Can be 'ls' to list or 'new' to create.\n    branch_name: Required if action is 'new'.\n    basis: Optional starting point for the new branch.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "action": {
+        "default": "ls",
+        "title": "Action",
+        "type": "string"
+      },
+      "basis": {
+        "default": "",
+        "title": "Basis",
+        "type": "string"
+      },
+      "branch_name": {
+        "default": "",
+        "title": "Branch Name",
+        "type": "string"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      }
+    },
+    "title": "fossil_branchArguments",
+    "type": "object"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "fossil_tag",
+  "description": "Manage Fossil tags (symbolic labels on check-ins).\n\nArgs:\n    action: 'ls' (list tags), 'add' (add tag), 'cancel' (delete tag).\n    tag_name: Name of the tag (required for 'add' and 'cancel').\n    checkin: Check-in / commit hash or branch target (required for 'add', optional for 'cancel').\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "action": {
+        "default": "ls",
+        "title": "Action",
+        "type": "string"
+      },
+      "checkin": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Checkin"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "tag_name": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Tag Name"
+      }
+    },
+    "title": "fossil_tagArguments",
+    "type": "object"
+  }
+}

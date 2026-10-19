@@ -1,0 +1,39 @@
+{
+  "name": "fossil_ticket_update",
+  "description": "Modify an attribute for an existing ticket. Example: field_name=\"status\", field_value=\"Closed\".\n\nArgs:\n    ticket_id: The ID of the ticket to update.\n    field_name: The name of the field to modify.\n    field_value: The new value for the field.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "field_name": {
+        "title": "Field Name",
+        "type": "string"
+      },
+      "field_value": {
+        "title": "Field Value",
+        "type": "string"
+      },
+      "ticket_id": {
+        "title": "Ticket Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "ticket_id",
+      "field_name",
+      "field_value"
+    ],
+    "title": "fossil_ticket_updateArguments",
+    "type": "object"
+  }
+}

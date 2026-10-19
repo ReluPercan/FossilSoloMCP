@@ -1,0 +1,27 @@
+{
+  "name": "fossil_close",
+  "description": "Close the open Fossil check-out in the current or specified working directory.\n\nArgs:\n    force: If True, uses the -f (--force) option to close even if there are uncommitted local changes or stash.\n    cwd: Optional path to the directory where the check-out is currently open.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "force": {
+        "default": false,
+        "title": "Force",
+        "type": "boolean"
+      }
+    },
+    "title": "fossil_closeArguments",
+    "type": "object"
+  }
+}

@@ -286,6 +286,10 @@
     color: inherit;
     font-size: 1em;
   }
+  pre.text, .important pre, .tip pre, .warning pre, .caution pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
 
   .kw, .cf { color: #f472b6; font-weight: 600; }
   .dt { color: #38bdf8; }
@@ -443,7 +447,7 @@ testare, documentație — cu <strong>omul</strong> 👨‍💻 în buclă ca
 <h1 id="fossil-scm---server-mcp">Fossil SCM - Server MCP</h1>
 <p>Un server robust bazat pe protocolul Model Context Protocol (MCP) ce
 oferă acces programatic complet și non-interactiv (headless) la
-depozitele <strong>Fossil SCM</strong>. Acesta expune <strong>29 de
+depozitele <strong>Fossil SCM</strong>. Acesta expune <strong>31 de
 unelte dedicate</strong> care acoperă Controlul Versiunilor,
 Administrarea &amp; Setările Depozitului, Sistemul de Tichete (Bug
 Tracking) și Documentația Wiki, concepute special pentru agenți AI
@@ -521,7 +525,7 @@ recomandată.</p>
 <h2 id="caracteristici-și-funcționalități-cheie">Caracteristici și
 Funcționalități Cheie</h2>
 <ul>
-<li><strong>29 de Unelte Specializate:</strong>
+<li><strong>31 de Unelte Specializate:</strong>
 <ul>
 <li><strong>Controlul Versiunilor (20 de unelte):</strong> Starea
 spațiului de lucru (<code>fossil_status</code>), diferențe cu suport
@@ -550,9 +554,11 @@ depozitului.</li>
 (<code>fossil_wiki_ls</code>), export/citire
 (<code>fossil_wiki_read</code>) și comitere/scriere
 (<code>fossil_wiki_write</code>) pagini wiki în format Markdown.</li>
-<li><strong>Administrare &amp; Configurare Depozit (3 unelte):</strong>
+<li><strong>Administrare &amp; Configurare Depozit (5 unelte):</strong>
 Inițializare depozite noi (<code>fossil_init</code>), deschidere
-depozite (<code>fossil_open</code>) și inspectare/modificare setări
+depozite (<code>fossil_open</code>), închidere checkout activ
+(<code>fossil_close</code>), clonare depozite la distanță sau locale
+(<code>fossil_clone</code>) și inspectare/modificare setări
 (<code>fossil_settings</code>).</li>
 </ul></li>
 <li><strong>Reziliență Non-Interactivă &amp; Anti-Hang:</strong>
@@ -580,7 +586,7 @@ utilizatorului înainte de execuție.</li>
 <hr />
 <h2 id="books-documentație-completă">📚 Documentație Completă</h2>
 <p>Pentru detalii arhitecturale avansate, ghiduri de fluxuri AI și
-referința completă a tuturor celor 29 de instrumente, consultați <a
+referința completă a tuturor celor 31 de instrumente, consultați <a
 href="../MANUAL.html">Manualul de Utilizare și Referință
 Tehnică</a>.</p>
 <hr />

@@ -1,0 +1,78 @@
+{
+  "name": "fossil_commit",
+  "description": "Launch a commit in the repository with current local modifications.\nAutomatically handles interactive prompts for new binary files by sending 'a' (all).\n\nArgs:\n    message: The commit message.\n    files: Optional list of specific files to commit. If empty, commits all modified/added files.\n    branch: Optional new branch name to place this commit on (--branch).\n    no_warnings: Omit all warnings about file contents (default: True).\n    allow_empty: Allow a commit with no changes (default: False).\n    user_override: Record this user as the login that created the new check-in.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "allow_empty": {
+        "default": false,
+        "title": "Allow Empty",
+        "type": "boolean"
+      },
+      "branch": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Branch"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "files": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Files"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "no_warnings": {
+        "default": true,
+        "title": "No Warnings",
+        "type": "boolean"
+      },
+      "user_override": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Override"
+      }
+    },
+    "required": [
+      "message"
+    ],
+    "title": "fossil_commitArguments",
+    "type": "object"
+  }
+}

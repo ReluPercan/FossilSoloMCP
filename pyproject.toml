@@ -1,7 +1,7 @@
 [project]
 name = "fossil-scm-mcp"
-version = "1.0.0"
-description = "Model Context Protocol (MCP) server for Fossil SCM with 29 specialized tools for AI agents"
+version = "1.0.1"
+description = "Model Context Protocol (MCP) server for Fossil SCM with 31 specialized tools for AI agents"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
@@ -17,9 +17,29 @@ keywords = [
     "ai-agents",
     "fastmcp"
 ]
-dependencies = [
-    "mcp",
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Software Development :: Version Control",
 ]
+dependencies = [
+    "mcp>=1.3.0,<2",
+]
+
+[project.urls]
+Homepage = "https://github.com/ReluPercan/FossilSoloMCP"
+Documentation = "https://github.com/ReluPercan/FossilSoloMCP#readme"
+Repository = "https://github.com/ReluPercan/FossilSoloMCP.git"
+"Bug Tracker" = "https://github.com/ReluPercan/FossilSoloMCP/issues"
 
 [project.scripts]
 fossil-scm-mcp = "fossil_scm_mcp.server:main"
@@ -30,3 +50,13 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fossil_scm_mcp"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/Surse",
+    "/arh_r",
+    "/agent-vc-mcp",
+    "/.agents",
+    "/.venv",
+    "/scripts",
+]

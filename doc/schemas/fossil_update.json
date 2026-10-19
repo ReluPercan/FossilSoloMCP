@@ -1,0 +1,27 @@
+{
+  "name": "fossil_update",
+  "description": "WARNING: Destructive action. Switch to the indicated version/branch, or update the current branch if target is empty. This overrides local workspace state! Ensure you have user permission.\n\nArgs:\n    target: The version/branch to update to.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "target": {
+        "default": "",
+        "title": "Target",
+        "type": "string"
+      }
+    },
+    "title": "fossil_updateArguments",
+    "type": "object"
+  }
+}

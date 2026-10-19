@@ -1,0 +1,42 @@
+{
+  "name": "fossil_rm",
+  "description": "Remove one or more files or directories from the repository.\n\nArgs:\n    files: List of file or directory paths to remove.\n    force: Remove files from the check-out/disk as well (--hard).\n    keep: Skip removing files from the check-out/disk (--soft).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "files": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Files",
+        "type": "array"
+      },
+      "force": {
+        "default": false,
+        "title": "Force",
+        "type": "boolean"
+      },
+      "keep": {
+        "default": false,
+        "title": "Keep",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "files"
+    ],
+    "title": "fossil_rmArguments",
+    "type": "object"
+  }
+}

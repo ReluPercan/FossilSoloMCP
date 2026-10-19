@@ -1,0 +1,27 @@
+{
+  "name": "fossil_info",
+  "description": "Provide metadata about the repository status, or a specific file/commit if 'target' is given.\n\nArgs:\n    target: Optional file name, commit ID, or branch to get info about.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "target": {
+        "default": "",
+        "title": "Target",
+        "type": "string"
+      }
+    },
+    "title": "fossil_infoArguments",
+    "type": "object"
+  }
+}

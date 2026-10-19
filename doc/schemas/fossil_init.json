@@ -1,0 +1,46 @@
+{
+  "name": "fossil_init",
+  "description": "Create a new Fossil repository database from scratch. Automatically places the database in the '.fossil_repositories' parent directory if no explicit path is provided.\n\nArgs:\n    db_name: Optional filename or path for the repository database (defaults to auto-derived '<project_name>.fossil' in parent '.fossil_repositories').\n    project_name: Optional name for the project (defaults to the workspace folder name).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "db_name": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Db Name"
+      },
+      "project_name": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Project Name"
+      }
+    },
+    "title": "fossil_initArguments",
+    "type": "object"
+  }
+}

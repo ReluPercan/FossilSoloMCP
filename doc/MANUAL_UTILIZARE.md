@@ -37,7 +37,7 @@ Deși este optimizat pentru lucrul solo asistat de AI, Fossil este o alegere exc
 4. **Server Web încorporat fără configurare:** Orice membru al echipei poate lansa instantaneu `fossil server` pe o mașină din rețeaua locală sau pe un VPS modest. Întreaga echipă beneficiază pe loc de o interfață web completă și securizată (cu utilizatori, permisiuni pe roluri, code review, tichete și pagini wiki), fără să fie nevoie de Nginx, Docker sau baze de date externe.
 
 ### Rolul serverului FossilSoloMCP
-Acest server MCP acționează ca o punte de comunicație de mare viteză între modelele LLM și depozitele Fossil, expunând **29 de unelte specializate** prin protocolul standardizat MCP (Model Context Protocol).
+Acest server MCP acționează ca o punte de comunicație de mare viteză între modelele LLM și depozitele Fossil, expunând **31 de unelte specializate** prin protocolul standardizat MCP (Model Context Protocol).
 
 ---
 
@@ -67,15 +67,15 @@ Deși conceptul de a oferi asistenților AI control asupra unui sistem de versio
 
 ---
 
-### Trecerea la `FossilSoloMCP`: Rescriere și Maturizare
+### Trecerea la `FossilSoloMCP`: Reproiectare și Rescriere
 
 S-a luat decizia strategică de a rescrie serverul complet de la zero în **Python**, folosind framework-ul performant **FastMCP**.
 
 | Caracteristică | `agent-vc-mcp` (Original) | `FossilSoloMCP` (Proiectul Curent) |
 | :--- | :--- | :--- |
 | **Limbaj & Runtime** | TypeScript / Node.js (`npx`) | **Python 3.14+ (FastMCP)** gestionat ultrarapid prin `uv` |
-| **Număr Unelte Expuse** | Exact 10 unelte | **29 de unelte complete și specializate** |
-| **Gestiune Directoare (CWD)** | Static, fixat la pornire via env vars | **Dinamic per apel (`cwd`)** pe toate cele 29 de unelte |
+| **Număr Unelte Expuse** | Exact 10 unelte | **31 de unelte complete și specializate** |
+| **Gestiune Directoare (CWD)** | Static, fixat la pornire via env vars | **Dinamic per apel (`cwd`)** pe toate cele 31 de unelte |
 | **Organizare Depozite** | Un singur repo comun în `~/.agent-vc/` | **Repozitorii independente**, stocate curat în `.fossil_repositories/` |
 | **Operațiuni pe Fișiere** | Forța wrapper-e rigide (`write_file`, etc.) | **Decuplat total:** se bazează pe uneltele native ale agentului |
 | **Inspecție Istorică Avansată** | Niciuna (doar `vc_diff` global) | **`fossil_timeline` (cu filtre), `fossil_finfo`, `fossil_cat` istoric** |
@@ -283,7 +283,7 @@ Paginile Wiki din Fossil sunt stocate direct în depozit și nu depind de fișie
 
 ---
 
-## 6. Referința Completă a Celor 29 de Instrumente MCP
+## 6. Referința Completă a Celor 31 de Instrumente MCP
 
 ### A. Version Control (20 Instrumente)
 
@@ -446,7 +446,7 @@ Paginile Wiki din Fossil sunt stocate direct în depozit și nu depind de fișie
 
 ---
 
-### B. Administrare & Depozit (3 Instrumente)
+### B. Administrare & Depozit (5 Instrumente)
 
 #### 21. `fossil_init`
 - **Descriere:** Creează și configurează o nouă bază de date Fossil și o deschide automat în directorul indicat.
@@ -461,9 +461,23 @@ Paginile Wiki din Fossil sunt stocate direct în depozit și nu depind de fișie
   - `db_name` *(string, obligatoriu)*: Numele sau calea depozitului `.fossil`.
   - `force` *(boolean, default: false)*: Forțează deschiderea chiar dacă directorul nu e gol (`-f`).
   - `keep` *(boolean, default: false)*: Păstrează fișierele locale existente (`-k`).
+  - `workdir` *(string, opțional)*: Directorul țintă în care se va deschide checkout-ul (implicit directorul părinte al depozitului).
   - `cwd` *(string, opțional)*: Directorul de lucru.
 
-#### 23. `fossil_settings`
+#### 23. `fossil_close`
+- **Descriere:** Închide checkout-ul Fossil activ din directorul specificat, decuplând spațiul de lucru de fișierul depozit.
+- **Parametri:**
+  - `force` *(boolean, default: false)*: Forțează închiderea chiar dacă există modificări locale necomise (`-f`).
+  - `cwd` *(string, opțional)*: Directorul de lucru.
+
+#### 24. `fossil_clone`
+- **Descriere:** Clonează un depozit Fossil de la un URL la distanță (HTTP/HTTPS/SSH) sau dintr-o cale locală direct într-un fișier bază de date `.fossil`, fără a deschide checkout în directorul curent.
+- **Parametri:**
+  - `url_or_path` *(string, obligatoriu)*: URL-ul la distanță (HTTP/HTTPS/SSH) sau calea fișierului local sursă.
+  - `repository_path` *(string, obligatoriu)*: Calea fișierului `.fossil` destinație.
+  - `cwd` *(string, opțional)*: Directorul de lucru.
+
+#### 25. `fossil_settings`
 - **Descriere:** Consultă sau modifică proprietățile și setările depozitului (`crlf-glob`, `binary-glob`, `ignore-glob`, `autosync` etc.).
 - **Parametri:**
   - `name` *(string, opțional)*: Numele proprietății (dacă lipsește, listează toate setările).
@@ -474,13 +488,13 @@ Paginile Wiki din Fossil sunt stocate direct în depozit și nu depind de fișie
 
 ### C. Sistemul de Ticketing (3 Instrumente)
 
-#### 24. `fossil_ticket_list`
+#### 26. `fossil_ticket_list`
 - **Descriere:** Listează tichetele existente în depozit (cu fallback automat pe interogare directă SQLite dacă rapoartele Fossil nu sunt configurate).
 - **Parametri:**
   - `report` *(integer, default: 1)*: Numărul raportului standard Fossil.
   - `cwd` *(string, opțional)*: Directorul de lucru.
 
-#### 25. `fossil_ticket_create`
+#### 27. `fossil_ticket_create`
 - **Descriere:** Deschide un tichet nou în sistemul de tracking al depozitului.
 - **Parametri:**
   - `title` *(string, obligatoriu)*: Titlul sau rezumatul sarcinii/erorii.
@@ -488,7 +502,7 @@ Paginile Wiki din Fossil sunt stocate direct în depozit și nu depind de fișie
   - `additional_fields` *(dicționar / obiect JSON, opțional)*: Câmpuri adiționale (ex: `type`, `severity`, `subsystem`, `description`).
   - `cwd` *(string, opțional)*: Directorul de lucru.
 
-#### 26. `fossil_ticket_update`
+#### 28. `fossil_ticket_update`
 - **Descriere:** Modifică un câmp sau statusul unui tichet existent.
 - **Parametri:**
   - `ticket_id` *(string, obligatoriu)*: Identificatorul UUID al tichetului (sau primele caractere).
@@ -500,18 +514,18 @@ Paginile Wiki din Fossil sunt stocate direct în depozit și nu depind de fișie
 
 ### D. Sistemul Wiki (3 Instrumente)
 
-#### 27. `fossil_wiki_ls`
+#### 29. `fossil_wiki_ls`
 - **Descriere:** Returnează lista tuturor paginilor wiki existente în depozit.
 - **Parametri:**
   - `cwd` *(string, opțional)*: Directorul de lucru.
 
-#### 28. `fossil_wiki_read`
+#### 30. `fossil_wiki_read`
 - **Descriere:** Citește și returnează conținutul complet în format text/markdown al paginii wiki solicitate.
 - **Parametri:**
   - `page_name` *(string, obligatoriu)*: Numele paginii wiki.
   - `cwd` *(string, opțional)*: Directorul de lucru.
 
-#### 29. `fossil_wiki_write`
+#### 31. `fossil_wiki_write`
 - **Descriere:** Creează o pagină wiki nouă sau actualizează conținutul unei pagini existente în depozit.
 - **Parametri:**
   - `page_name` *(string, obligatoriu)*: Numele paginii wiki.

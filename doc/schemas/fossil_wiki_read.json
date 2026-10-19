@@ -1,0 +1,29 @@
+{
+  "name": "fossil_wiki_read",
+  "description": "Read the content of a wiki page in raw markdown/wiki format.\n\nArgs:\n    page_name: The name of the wiki page.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "page_name": {
+        "title": "Page Name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "page_name"
+    ],
+    "title": "fossil_wiki_readArguments",
+    "type": "object"
+  }
+}

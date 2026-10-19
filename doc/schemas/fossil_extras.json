@@ -1,0 +1,39 @@
+{
+  "name": "fossil_extras",
+  "description": "Print a list of all files in the source tree that are not part of the current check-out.\n\nArgs:\n    dotfiles: Include files/directories beginning with a dot.\n    ignore: Comma-separated list of glob patterns to ignore.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "dotfiles": {
+        "default": false,
+        "title": "Dotfiles",
+        "type": "boolean"
+      },
+      "ignore": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Ignore"
+      }
+    },
+    "title": "fossil_extrasArguments",
+    "type": "object"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "fossil_timeline",
+  "description": "Extract the history (timeline) of actions from the repository.\n\nArgs:\n    limit: Number of events to show (default: 20).\n    path: Optional file or directory path to filter history (-p).\n    type_filter: Optional filter for event types, e.g. 'ci' for check-ins, or branch name (-t).\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "limit": {
+        "default": 20,
+        "title": "Limit",
+        "type": "integer"
+      },
+      "path": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Path"
+      },
+      "type_filter": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Type Filter"
+      }
+    },
+    "title": "fossil_timelineArguments",
+    "type": "object"
+  }
+}

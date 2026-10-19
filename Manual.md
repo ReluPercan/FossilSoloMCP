@@ -37,7 +37,7 @@ While optimized for solo AI-assisted development, Fossil is also an outstanding 
 4. **Zero-Configuration Built-in Web Server:** Any team member can instantly launch `fossil server` on a local network machine or a modest VPS. The entire team instantly benefits from a full, secure web interface (with users, role-based permissions, code review, ticketing, and wiki pages) without needing Nginx, Docker, or external databases.
 
 ### The Role of the FossilSoloMCP Server
-This MCP server acts as a high-speed communication bridge between Large Language Models (LLMs) and Fossil repositories, exposing **29 specialized tools** via the standardized Model Context Protocol (MCP).
+This MCP server acts as a high-speed communication bridge between Large Language Models (LLMs) and Fossil repositories, exposing **31 specialized tools** via the standardized Model Context Protocol (MCP).
 
 ---
 
@@ -67,15 +67,15 @@ While the concept of giving AI assistants control over a version control system 
 
 ---
 
-### Transition to `FossilSoloMCP`: Complete Rewrite & Maturation
+### Transition to `FossilSoloMCP`: Redesign and Rewrite
 
 The strategic decision was made to rewrite the server entirely from scratch in **Python**, utilizing the high-performance **FastMCP** framework.
 
 | Feature / Aspect | `agent-vc-mcp` (Original) | `FossilSoloMCP` (Current Project) |
 | :--- | :--- | :--- |
 | **Language & Runtime** | TypeScript / Node.js (`npx`) | **Python 3.14+ (FastMCP)** managed ultrarapidly via `uv` |
-| **Number of Tools Exposed** | Exactly 10 tools | **29 complete, specialized tools** |
-| **Directory Management (CWD)** | Static, fixed at startup via env vars | **Dynamic per call (`cwd`)** across all 29 tools |
+| **Number of Tools Exposed** | Exactly 10 tools | **31 complete, specialized tools** |
+| **Directory Management (CWD)** | Static, fixed at startup via env vars | **Dynamic per call (`cwd`)** across all 31 tools |
 | **Repository Organization** | Single shared repo in `~/.agent-vc/` | **Independent repositories**, cleanly stored in `.fossil_repositories/` |
 | **File Operations** | Forced rigid wrappers (`write_file`, etc.) | **Completely decoupled:** relies on agent's native file tools |
 | **Advanced History Inspection** | None (only global `vc_diff`) | **`fossil_timeline` (with filters), `fossil_finfo`, historical `fossil_cat`** |
@@ -283,7 +283,7 @@ Fossil Wiki pages are stored directly in the repository and do not depend on loo
 
 ---
 
-## 6. Complete Reference of the 29 MCP Tools
+## 6. Complete Reference of the 31 MCP Tools
 
 ### A. Version Control (20 Tools)
 
@@ -446,7 +446,7 @@ Fossil Wiki pages are stored directly in the repository and do not depend on loo
 
 ---
 
-### B. Repository Administration & Setup (3 Tools)
+### B. Repository Administration & Setup (5 Tools)
 
 #### 21. `fossil_init`
 - **Description:** Creates and initializes a new Fossil repository database and automatically opens it in the specified directory.
@@ -461,9 +461,23 @@ Fossil Wiki pages are stored directly in the repository and do not depend on loo
   - `db_name` *(string, required)*: Repository `.fossil` filename or path.
   - `force` *(boolean, default: false)*: Forces open even if directory is non-empty (`-f`).
   - `keep` *(boolean, default: false)*: Preserves existing local files (`-k`).
+  - `workdir` *(string, optional)*: Target directory where the checkout should be opened (defaults to repository parent folder).
   - `cwd` *(string, optional)*: Working directory path.
 
-#### 23. `fossil_settings`
+#### 23. `fossil_close`
+- **Description:** Closes the active Fossil checkout in the specified directory, disconnecting the working tree from the repository database.
+- **Parameters:**
+  - `force` *(boolean, default: false)*: Forces closure even if uncommitted changes exist (`-f`).
+  - `cwd` *(string, optional)*: Working directory path.
+
+#### 24. `fossil_clone`
+- **Description:** Clones a Fossil repository from a remote URL (HTTP/HTTPS/SSH) or a local file path into a target `.fossil` database file without opening a working directory.
+- **Parameters:**
+  - `url_or_path` *(string, required)*: Remote URL (HTTP/HTTPS/SSH) or local file path to clone from.
+  - `repository_path` *(string, required)*: Target `.fossil` file path.
+  - `cwd` *(string, optional)*: Working directory path.
+
+#### 25. `fossil_settings`
 - **Description:** Inspects or modifies repository configuration properties (`crlf-glob`, `binary-glob`, `ignore-glob`, `autosync`, etc.).
 - **Parameters:**
   - `name` *(string, optional)*: Property name (if omitted, lists all settings).
@@ -474,13 +488,13 @@ Fossil Wiki pages are stored directly in the repository and do not depend on loo
 
 ### C. Ticketing System (3 Tools)
 
-#### 24. `fossil_ticket_list`
+#### 26. `fossil_ticket_list`
 - **Description:** Lists existing tickets in the repository (includes automatic fallback to direct SQLite querying if standard Fossil ticket reports are not configured).
 - **Parameters:**
   - `report` *(integer, default: 1)*: Standard Fossil report number.
   - `cwd` *(string, optional)*: Working directory path.
 
-#### 25. `fossil_ticket_create`
+#### 27. `fossil_ticket_create`
 - **Description:** Opens a new ticket in the repository's tracking database.
 - **Parameters:**
   - `title` *(string, required)*: Title or summary of the task/defect.
@@ -488,7 +502,7 @@ Fossil Wiki pages are stored directly in the repository and do not depend on loo
   - `additional_fields` *(JSON dictionary/object, optional)*: Additional fields (e.g., `type`, `severity`, `subsystem`, `description`).
   - `cwd` *(string, optional)*: Working directory path.
 
-#### 26. `fossil_ticket_update`
+#### 28. `fossil_ticket_update`
 - **Description:** Modifies a field or status of an existing ticket.
 - **Parameters:**
   - `ticket_id` *(string, required)*: Ticket UUID identifier (or prefix).
@@ -500,18 +514,18 @@ Fossil Wiki pages are stored directly in the repository and do not depend on loo
 
 ### D. Wiki System (3 Tools)
 
-#### 27. `fossil_wiki_ls`
+#### 29. `fossil_wiki_ls`
 - **Description:** Returns a list of all wiki pages present in the repository.
 - **Parameters:**
   - `cwd` *(string, optional)*: Working directory path.
 
-#### 28. `fossil_wiki_read`
+#### 30. `fossil_wiki_read`
 - **Description:** Reads and returns complete text/markdown content of requested wiki page.
 - **Parameters:**
   - `page_name` *(string, required)*: Wiki page name.
   - `cwd` *(string, optional)*: Working directory path.
 
-#### 29. `fossil_wiki_write`
+#### 31. `fossil_wiki_write`
 - **Description:** Creates a new wiki page or updates content of an existing wiki page in the repository.
 - **Parameters:**
   - `page_name` *(string, required)*: Wiki page name.

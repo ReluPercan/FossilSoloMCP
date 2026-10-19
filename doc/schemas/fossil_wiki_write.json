@@ -1,0 +1,34 @@
+{
+  "name": "fossil_wiki_write",
+  "description": "Create or update a wiki page with new content.\n\nArgs:\n    page_name: The name of the wiki page.\n    content: The text content to write.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "content": {
+        "title": "Content",
+        "type": "string"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "page_name": {
+        "title": "Page Name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "page_name",
+      "content"
+    ],
+    "title": "fossil_wiki_writeArguments",
+    "type": "object"
+  }
+}

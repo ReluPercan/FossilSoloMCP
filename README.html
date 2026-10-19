@@ -286,6 +286,10 @@
     color: inherit;
     font-size: 1em;
   }
+  pre.text, .important pre, .tip pre, .warning pre, .caution pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
 
   .kw, .cf { color: #f472b6; font-weight: 600; }
   .dt { color: #38bdf8; }
@@ -443,7 +447,7 @@ loop as the <strong>big boss</strong> 👨‍💼 for <strong>control</strong>,
 <h1 id="fossil-scm---mcp-server">Fossil SCM - MCP Server</h1>
 <p>A robust Model Context Protocol (MCP) server providing comprehensive,
 headless programmatic access to <strong>Fossil SCM</strong>
-repositories. It exposes <strong>29 dedicated tools</strong> covering
+repositories. It exposes <strong>31 dedicated tools</strong> covering
 Version Control, Repository Administration &amp; Settings, Bug/Task
 Ticketing, and Wiki management, tailored specifically for AI agents
 (Google Antigravity, Claude Desktop, Cursor, etc.).</p>
@@ -517,7 +521,7 @@ the recommended practice.</p>
 </div>
 <h2 id="key-features--capabilities">Key Features &amp; Capabilities</h2>
 <ul>
-<li><strong>29 Specialized Tools:</strong>
+<li><strong>31 Specialized Tools:</strong>
 <ul>
 <li><strong>Version Control (20 tools):</strong> Workspace status
 (<code>fossil_status</code>), diff with revision and branch support
@@ -544,9 +548,11 @@ repository database.</li>
 (<code>fossil_wiki_ls</code>), export/read
 (<code>fossil_wiki_read</code>), and commit/write
 (<code>fossil_wiki_write</code>) Markdown wiki pages.</li>
-<li><strong>Repository Administration &amp; Setup (3 tools):</strong>
+<li><strong>Repository Administration &amp; Setup (5 tools):</strong>
 Initialize new repositories (<code>fossil_init</code>), open
-repositories (<code>fossil_open</code>), and inspect/modify repository
+repositories (<code>fossil_open</code>), close active checkouts
+(<code>fossil_close</code>), clone remote or local repositories
+(<code>fossil_clone</code>), and inspect/modify repository
 configurations (<code>fossil_settings</code>).</li>
 </ul></li>
 <li><strong>Headless &amp; Anti-Hang Resilience:</strong>
@@ -572,7 +578,7 @@ warnings so AI agents ask for human confirmation before executing.</li>
 <hr />
 <h2 id="books-documentation">📚 Documentation</h2>
 <p>For complete architectural details, AI agent workflows, and the
-in-depth API reference covering all 29 tools, see the <a
+in-depth API reference covering all 31 tools, see the <a
 href="MANUAL.html">User Manual &amp; Technical Reference</a>.</p>
 <hr />
 <h2 id="page_facing_up-license">📄 License</h2>

@@ -1,0 +1,44 @@
+{
+  "name": "fossil_status",
+  "description": "Display the current status of files in the repository (modified, added, un-tracked).\n\nArgs:\n    dotfiles: Include files/directories beginning with a dot in untracked files list.\n    brief: Show a single keyword for the status.\n    ignore: Comma-separated list of glob patterns for extra files to be ignored.\n    cwd: Optional path to the directory where the command should be executed.\n",
+  "parameters": {
+    "properties": {
+      "brief": {
+        "default": false,
+        "title": "Brief",
+        "type": "boolean"
+      },
+      "cwd": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cwd"
+      },
+      "dotfiles": {
+        "default": false,
+        "title": "Dotfiles",
+        "type": "boolean"
+      },
+      "ignore": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Ignore"
+      }
+    },
+    "title": "fossil_statusArguments",
+    "type": "object"
+  }
+}
