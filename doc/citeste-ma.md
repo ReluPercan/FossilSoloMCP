@@ -9,6 +9,13 @@
 
 # Fossil SCM - Server MCP
 
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![MCP](https://img.shields.io/badge/MCP-1.3.0+-8A2BE2.svg)](https://modelcontextprotocol.io/)
+[![GitHub Release](https://img.shields.io/github/v/release/ReluPercan/FossilSoloMCP?logo=github&logoColor=white)](https://github.com/ReluPercan/FossilSoloMCP/releases)
+[![PyPI](https://img.shields.io/pypi/v/fossil-scm-mcp.svg?logo=pypi&logoColor=white)](https://pypi.org/project/fossil-scm-mcp/)
+[![Licență: MIT](https://img.shields.io/badge/Licență-MIT-brightgreen.svg)](../LICENSE)
+[![Fossil SCM](https://img.shields.io/badge/Fossil_SCM-Compatibil-blue.svg)](https://fossil-scm.org/)
+
 Un server robust bazat pe protocolul Model Context Protocol (MCP) ce oferă acces programatic complet și non-interactiv (headless) la depozitele **Fossil SCM**. Acesta expune **31 de unelte dedicate** care acoperă Controlul Versiunilor, Administrarea & Setările Depozitului, Sistemul de Tichete (Bug Tracking) și Documentația Wiki, concepute special pentru agenți AI (Google Antigravity, Claude Desktop, Cursor etc.).
 
 ## Cerințe preliminare

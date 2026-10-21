@@ -9,6 +9,13 @@
 
 # Fossil SCM - MCP Server
 
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![MCP](https://img.shields.io/badge/MCP-1.3.0+-8A2BE2.svg)](https://modelcontextprotocol.io/)
+[![GitHub Release](https://img.shields.io/github/v/release/ReluPercan/FossilSoloMCP?logo=github&logoColor=white)](https://github.com/ReluPercan/FossilSoloMCP/releases)
+[![PyPI](https://img.shields.io/pypi/v/fossil-scm-mcp.svg?logo=pypi&logoColor=white)](https://pypi.org/project/fossil-scm-mcp/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
+[![Fossil SCM](https://img.shields.io/badge/Fossil_SCM-Compatible-blue.svg)](https://fossil-scm.org/)
+
 A robust Model Context Protocol (MCP) server providing comprehensive, headless programmatic access to **Fossil SCM** repositories. It exposes **31 dedicated tools** covering Version Control, Repository Administration & Settings, Bug/Task Ticketing, and Wiki management, tailored specifically for AI agents (Google Antigravity, Claude Desktop, Cursor, etc.).
 
 ## Prerequisites
